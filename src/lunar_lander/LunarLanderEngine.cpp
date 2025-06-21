@@ -19,19 +19,7 @@ bool LunarLanderEngine::loadMedia()
 
 bool LunarLanderEngine::create()
 {   
-    // TODO config this somewhere sensible
-    // Initialise the terrain data structure
-    TerrainGenerationConfig config {
-        static_cast<size_t>(mScreenWidth),          // worldWidth
-        static_cast<size_t>(mScreenHeight),         // worldHeight
-        static_cast<int>(mScreenHeight * 0.7),      // heightVariation
-        static_cast<int>(mScreenHeight * 0.5),      // startHeight
-        4,                                          // octaves
-        0.5,                                        // persistence
-        0.0025                                      // frequency
-    }; 
-    mTerrainGenerator.generateTerrain(mTerrain, config);
-
+    generateTerrain();
     return true;
 }
 
@@ -45,27 +33,57 @@ bool LunarLanderEngine::update()
         {
             mQuit = true;
         }
+        // If a key was pressed
+        else if (mEvent.type == SDL_KEYDOWN)
+        {
+            // Adjust the velocity
+            switch (mEvent.key.keysym.sym)
+            {
+            case SDLK_r:
+                generateTerrain();
+                break;
+            }
+        }
     }
     return true;
 }
 
 bool LunarLanderEngine::render()
 {   
-    // Draw the background
-    mTextures.at("background.bmp")->render(0, 0);
-
-    // TODO this could be pretty slow for every screen pixel. We can do dynamic pixel writing instead
     SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 255);
-    for (size_t y = 0; y < mTerrain.size(); y++)
+    SDL_RenderClear(mRenderer.get());
+    SDL_SetRenderDrawColor(mRenderer.get(), 255, 255, 255, 255);
+    for (size_t x = 0; x < mTerrain[0].size(); x++)
     {
-        for (size_t x = 0; x < mTerrain[0].size(); x++)
+        bool drawn { false };
+        size_t y { 0 };
+        while ( !drawn )
         {
-            if (mTerrain[y][x] == 1) 
+            if (mTerrain[y][x] == 1)
             {
                 SDL_RenderDrawPoint(mRenderer.get(), static_cast<int>(x), static_cast<int>(y));
+                drawn = true;
             }
+            y++;
         }
     }
+    return true;
+}
 
+bool LunarLanderEngine::generateTerrain()
+{
+    // TODO config this somewhere sensible
+    // Initialise the terrain data structure
+    TerrainGenerationConfig config {
+        static_cast<size_t>(mScreenWidth),          // worldWidth
+        static_cast<size_t>(mScreenHeight),         // worldHeight
+        static_cast<int>(mScreenHeight * 0.7),      // heightVariation
+        static_cast<int>(mScreenHeight * 0.5),      // startHeight
+        4,                                          // octaves
+        0.5,                                        // persistence
+        0.0025                                      // frequency
+    };
+    std::cout << "Generating terrain" << std::endl;
+    mTerrainGenerator.generateTerrain(mTerrain, config);
     return true;
 }

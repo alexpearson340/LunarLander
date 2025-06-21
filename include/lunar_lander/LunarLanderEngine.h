@@ -16,6 +16,8 @@ private:
     bool update() override;
     bool render() override;
 
+    bool generateTerrain();
+
     std::vector<std::vector<int>> mTerrain;
     TerrainGenerator mTerrainGenerator;
 };
