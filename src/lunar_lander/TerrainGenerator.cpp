@@ -1,0 +1,28 @@
+#include "lunar_lander/TerrainGenerator.h"
+#include <iostream>
+
+TerrainGenerator::TerrainGenerator()
+{};
+
+void TerrainGenerator::generateTerrain(std::vector<std::vector<int>> & terrain, const TerrainGenerationConfig config) const
+{    
+    initializeTerrain(terrain, config);
+    for (size_t x = 0; x < config.worldWidth; x++)
+    {
+        double noiseValue { mNoise.octaveNoise(x, config.octaves, config.persistence, config.scale) };
+        int terrainHeight { config.startHeight + static_cast<int>(noiseValue * config.heightVariation) };
+        for (size_t y = config.worldHeight - 1; y > config.worldHeight - static_cast<size_t>(terrainHeight); y--)
+        {
+            terrain[y][x] = 1;
+        }
+    }
+};
+
+void TerrainGenerator::initializeTerrain(std::vector<std::vector<int>> & terrain, const TerrainGenerationConfig config) const
+{
+    terrain.resize(config.worldHeight);
+    for (size_t x = 0; x < config.worldHeight; x++)
+    {
+        terrain[x].resize(config.worldWidth, 0);
+    }
+};

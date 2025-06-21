@@ -3,6 +3,7 @@
 
 #include "engine/BaseEngine.h"
 #include "lunar_lander/Constants.h"
+#include "lunar_lander/TerrainGenerator.h"
 
 class LunarLanderEngine : public BaseEngine
 {
@@ -14,6 +15,9 @@ private:
     bool create() override;
     bool update() override;
     bool render() override;
+
+    std::vector<std::vector<int>> mTerrain;
+    TerrainGenerator mTerrainGenerator;
 };
 
 #endif // LUNARLANDERENGINE_H

@@ -59,6 +59,7 @@ target_link_libraries(engine_lib
 # lunar lander game
 add_library(lunar_lander_lib STATIC 
     src/lunar_lander/LunarLanderEngine.cpp
+    src/lunar_lander/TerrainGenerator.cpp
 )
 set_project_warnings(lunar_lander_lib)
 target_link_libraries(lunar_lander_lib

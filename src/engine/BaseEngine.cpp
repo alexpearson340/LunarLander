@@ -190,19 +190,8 @@ int BaseEngine::run(int argc, char* args[])
                 update();
 
                 // Clear screen
-                SDL_SetRenderDrawColor(mRenderer.get(), 0xFF, 0xFF, 0xFF, 0xFF);
+                SDL_SetRenderDrawColor(mRenderer.get(), 255, 255, 255, 255);
                 SDL_RenderClear(mRenderer.get());
-
-                // Draw the information box
-                SDL_SetRenderDrawColor(mRenderer.get(),
-                    BACKGROUND_COLOUR.r,
-                    BACKGROUND_COLOUR.g,
-                    BACKGROUND_COLOUR.b,
-                    BACKGROUND_COLOUR.a);
-                static SDL_Rect infoBoxRect = {
-                    0, mScreenHeight - BOTTOM_BAR_HEIGHT, mScreenWidth, BOTTOM_BAR_HEIGHT
-                };
-                SDL_RenderFillRect(mRenderer.get(), &infoBoxRect);
 
                 // Render game state objects
                 render();

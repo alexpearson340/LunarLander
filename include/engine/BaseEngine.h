@@ -3,6 +3,7 @@
 
 #include "engine/Texture.h"
 #include <memory>
+#include <sstream>
 
 inline constexpr SDL_Color BACKGROUND_COLOUR { 250, 250, 250, 255 };
 inline constexpr SDL_Color TEXT_COLOUR { 0, 0, 0, 255 };
