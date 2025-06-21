@@ -20,7 +20,7 @@ class TerrainGenerator
 public:
     TerrainGenerator();
 
-    void generateTerrain(std::vector<std::vector<int>> &, TerrainGenerationConfig const) const;
+    void generateTerrain(std::vector<std::vector<int>> &, TerrainGenerationConfig const);
     void initializeTerrain(std::vector<std::vector<int>> &, TerrainGenerationConfig const) const;
 
 private:

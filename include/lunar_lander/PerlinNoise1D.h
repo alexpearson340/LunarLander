@@ -10,7 +10,7 @@ class PerlinNoise1D
 {
 public:
     // Constructor with optional seed for reproducible results
-    inline explicit PerlinNoise1D(unsigned int seed = std::random_device{}());
+    inline explicit PerlinNoise1D(unsigned int seed);
     
     // Generate noise value at position x
     // Returns value in range approximately [-1, 1]

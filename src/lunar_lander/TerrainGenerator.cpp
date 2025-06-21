@@ -1,11 +1,16 @@
 #include "lunar_lander/TerrainGenerator.h"
 #include <iostream>
+#include <random>
 
-TerrainGenerator::TerrainGenerator()
-{};
+TerrainGenerator::TerrainGenerator() :
+    mNoise { std::random_device{}() }
+{
+};
 
-void TerrainGenerator::generateTerrain(std::vector<std::vector<int>> & terrain, const TerrainGenerationConfig config) const
+void TerrainGenerator::generateTerrain(std::vector<std::vector<int>> & terrain, const TerrainGenerationConfig config)
 {    
+    mNoise = PerlinNoise1D(std::random_device{}());
+
     initializeTerrain(terrain, config);
     for (size_t x = 0; x < config.worldWidth; x++)
     {
@@ -20,6 +25,7 @@ void TerrainGenerator::generateTerrain(std::vector<std::vector<int>> & terrain, 
 
 void TerrainGenerator::initializeTerrain(std::vector<std::vector<int>> & terrain, const TerrainGenerationConfig config) const
 {
+    terrain = std::vector<std::vector<int>>{};
     terrain.resize(config.worldHeight);
     for (size_t x = 0; x < config.worldHeight; x++)
     {
