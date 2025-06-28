@@ -37,11 +37,17 @@ bool LunarLanderEngine::update()
         // If a key was pressed
         else if (mEvent.type == SDL_KEYDOWN)
         {
-            // Adjust the velocity
             switch (mEvent.key.keysym.sym)
             {
+            // rotate the spaceship
+            case SDLK_LEFT:
+                mPlayer.rotate(-ROTATION_SPEED);
+                break;
+            case SDLK_RIGHT:
+                mPlayer.rotate(ROTATION_SPEED);
+                break;
+            // regenerate the game  -   convenience
             case SDLK_r:
-                // regenerate the game
                 generateTerrain();
                 spawnPlayer();
                 break;

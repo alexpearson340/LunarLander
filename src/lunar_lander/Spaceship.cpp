@@ -18,6 +18,11 @@ Spaceship::Spaceship(int x, int y, Texture * texture) :
     mTexture { texture }
 {}
 
+void Spaceship::rotate(const int angle)
+{
+    mNoseAngle += angle;
+}
+
 void Spaceship::render() const
 {
     mTexture->render(mPosition.getX(), mPosition.getY(), NULL, mNoseAngle);

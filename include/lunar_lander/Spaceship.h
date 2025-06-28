@@ -10,6 +10,7 @@ public:
     Spaceship();
     Spaceship(int x, int y, Texture * texture);
 
+    void rotate(const int);
     void render() const;
 
 private:
