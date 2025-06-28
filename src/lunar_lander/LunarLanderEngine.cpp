@@ -54,6 +54,10 @@ bool LunarLanderEngine::update()
             }
         }
     }
+
+    // Handle physics
+    mPlayer.updatePhysics();
+
     return true;
 }
 

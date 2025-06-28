@@ -11,6 +11,7 @@ public:
     Spaceship(int x, int y, Texture * texture);
 
     void rotate(const int);
+    void updatePhysics();
     void render() const;
 
 private:
@@ -21,6 +22,7 @@ private:
     Vector2D mVelocity;
     Vector2D mAcceleration;
     Vector2D mJerk;
+    Vector2D mGravity;
 
     Texture* mTexture;
 };

@@ -8,7 +8,8 @@ constexpr int SCREEN_WIDTH { 1080 };
 constexpr int SCREEN_HEIGHT { 720 };
 
 // Game variables
-constexpr int ROTATION_SPEED { 10 };
+constexpr int ROTATION_SPEED { 30 };
+constexpr float GRAVITY { 0.01f };
 
 // Different textures for blocks
 constexpr std::string_view SPACESHIP_TEXTURE { "spaceship.bmp" };

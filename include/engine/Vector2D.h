@@ -5,17 +5,17 @@ class Vector2D
 {
 public:
 
-    Vector2D(const int x, const int y);
+    Vector2D(const float x, const float y);
 
-    int getX() const { return mX; }
-    int getY() const { return mY; }
+    float getX() const { return mX; }
+    float getY() const { return mY; }
     
     Vector2D& operator+=(const Vector2D& other);
     Vector2D& operator-=(const Vector2D& other);
 
 private:
-    int mX;
-    int mY;
+    float mX;
+    float mY;
 };
 
 inline Vector2D operator+(const Vector2D& left, const Vector2D& right)

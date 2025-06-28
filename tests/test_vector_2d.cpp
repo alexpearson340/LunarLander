@@ -4,46 +4,46 @@
 // Test fixture for Block tests
 class Vector2DTest : public ::testing::Test {
 protected:
-  Vector2D testVector{1, 1};
-  Vector2D otherVector{2, 3};
+  Vector2D testVector{1.0f, 1.0f};
+  Vector2D otherVector{2.0f, 3.0f};
 };
 
 TEST_F(Vector2DTest, TestConstructor) {
-  Vector2D vector{0, 0};
-  EXPECT_EQ(vector.getX(), 0);
-  EXPECT_EQ(vector.getY(), 0);
+  Vector2D vector{0.0f, 0.0f};
+  EXPECT_NEAR(vector.getX(), 0.0f, 0.0f);
+  EXPECT_NEAR(vector.getY(), 0.0f, 0.0f);
 }
 
-TEST_F(Vector2DTest, TestGetX) { EXPECT_EQ(testVector.getX(), 1); }
+TEST_F(Vector2DTest, TestGetX) { EXPECT_NEAR(testVector.getX(), 1.0f, 0.0f); }
 
-TEST_F(Vector2DTest, TestGetY) { EXPECT_EQ(testVector.getY(), 1); }
+TEST_F(Vector2DTest, TestGetY) { EXPECT_NEAR(testVector.getY(), 1.0f, 0.0f); }
 
 TEST_F(Vector2DTest, TestInPlaceAdd) {
   testVector += otherVector;
-  EXPECT_EQ(testVector.getX(), 3);
-  EXPECT_EQ(testVector.getY(), 4);
+  EXPECT_NEAR(testVector.getX(), 3.0f, 0.0f);
+  EXPECT_NEAR(testVector.getY(), 4.0f, 0.0f);
 }
 
 TEST_F(Vector2DTest, TestInPlaceSubtract) {
   testVector -= otherVector;
-  EXPECT_EQ(testVector.getX(), -1);
-  EXPECT_EQ(testVector.getY(), -2);
+  EXPECT_NEAR(testVector.getX(), -1.0f, 0.0f);
+  EXPECT_NEAR(testVector.getY(), -2.0f, 0.0f);
 }
 
 TEST_F(Vector2DTest, TestInPlaceAddChained) {
   testVector += otherVector += otherVector;
-  EXPECT_EQ(testVector.getX(), 5);
-  EXPECT_EQ(testVector.getY(), 7);
+  EXPECT_NEAR(testVector.getX(), 5.0f, 0.0f);
+  EXPECT_NEAR(testVector.getY(), 7.0f, 0.0f);
 }
 
 TEST_F(Vector2DTest, TestAdd) {
   Vector2D result{testVector + otherVector};
-  EXPECT_EQ(result.getX(), 3);
-  EXPECT_EQ(result.getY(), 4);
+  EXPECT_NEAR(result.getX(), 3.0f, 0.0f);
+  EXPECT_NEAR(result.getY(), 4.0f, 0.0f);
 }
 
 TEST_F(Vector2DTest, TestSubtract) {
-    Vector2D result{testVector - otherVector};
-    EXPECT_EQ(result.getX(), -1);
-    EXPECT_EQ(result.getY(), -2);
-  }
+  Vector2D result{testVector - otherVector};
+  EXPECT_NEAR(result.getX(), -1.0f, 0.0f);
+  EXPECT_NEAR(result.getY(), -2.0f, 0.0f);
+}
