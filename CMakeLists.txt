@@ -47,6 +47,7 @@ include_directories(
 add_library(engine_lib STATIC 
     src/engine/BaseEngine.cpp
     src/engine/Texture.cpp
+    src/engine/Vector2D.cpp
 )
 set_project_warnings(engine_lib)
 target_link_libraries(engine_lib
@@ -59,6 +60,7 @@ target_link_libraries(engine_lib
 # lunar lander game
 add_library(lunar_lander_lib STATIC 
     src/lunar_lander/LunarLanderEngine.cpp
+    src/lunar_lander/Spaceship.cpp
     src/lunar_lander/TerrainGenerator.cpp
 )
 set_project_warnings(lunar_lander_lib)
