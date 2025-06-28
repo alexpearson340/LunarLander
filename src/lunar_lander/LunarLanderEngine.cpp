@@ -13,13 +13,14 @@ bool LunarLanderEngine::loadMedia()
     mTextures.clear();
 
     // TODO - programmatically load textures in the assets dir
-    success = success && loadTexture("background.bmp");
+    success = success && loadTexture("spaceship.bmp");
     return success;
 }
 
 bool LunarLanderEngine::create()
 {   
     generateTerrain();
+    spawnPlayer();
     return true;
 }
 
@@ -40,7 +41,9 @@ bool LunarLanderEngine::update()
             switch (mEvent.key.keysym.sym)
             {
             case SDLK_r:
+                // regenerate the game
                 generateTerrain();
+                spawnPlayer();
                 break;
             }
         }
@@ -50,6 +53,7 @@ bool LunarLanderEngine::update()
 
 bool LunarLanderEngine::render()
 {   
+    // render terrain
     SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 255);
     SDL_RenderClear(mRenderer.get());
     SDL_SetRenderDrawColor(mRenderer.get(), 255, 255, 255, 255);
@@ -67,6 +71,10 @@ bool LunarLanderEngine::render()
             y++;
         }
     }
+
+    // render the player
+    mPlayer.render();
+    
     return true;
 }
 
@@ -85,5 +93,12 @@ bool LunarLanderEngine::generateTerrain()
     };
     std::cout << "Generating terrain" << std::endl;
     mTerrainGenerator.generateTerrain(mTerrain, config);
+    return true;
+}
+
+bool LunarLanderEngine::spawnPlayer()
+{   
+    std::cout << "Spawning player" << std::endl;
+    mPlayer = Spaceship(100, 100, mTextures.at(SPACESHIP_TEXTURE).get());
     return true;
 }
