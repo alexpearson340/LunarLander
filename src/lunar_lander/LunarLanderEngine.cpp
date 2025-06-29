@@ -37,20 +37,24 @@ bool LunarLanderEngine::update()
         {
             switch (mEvent.key.keysym.sym)
             {
-            // rotate the spaceship
-            case SDLK_LEFT:
-                mPlayer.rotate(-ROTATION_SPEED);
-                break;
-            case SDLK_RIGHT:
-                mPlayer.rotate(ROTATION_SPEED);
-                break;
-            // regenerate the game  -   convenience
+            // regenerate the game - debugging convenience
             case SDLK_r:
                 generateTerrain();
                 spawnPlayer();
                 break;
             }
         }
+    }
+
+    // Handle continuous key input for rotation
+    const Uint8* keyState = SDL_GetKeyboardState(NULL);
+    if (keyState[SDL_SCANCODE_LEFT])
+    {
+        mPlayer.rotate(-ROTATION_SPEED);
+    }
+    if (keyState[SDL_SCANCODE_RIGHT])
+    {
+        mPlayer.rotate(ROTATION_SPEED);
     }
 
     // Handle physics
