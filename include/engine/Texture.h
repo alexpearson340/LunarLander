@@ -27,6 +27,9 @@ public:
 
     ~Texture();
 
+    int getWidth() const { return mWidth; };
+    int getHeight() const { return mHeight; };
+
     // Loads image at specified path
     bool loadFromFile(const std::string& path);
 

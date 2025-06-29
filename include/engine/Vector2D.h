@@ -9,6 +9,9 @@ public:
 
     float getX() const { return mX; }
     float getY() const { return mY; }
+
+    void setX(const float x) { mX = x; };
+    void setY(const float y) { mY = y; };
     
     Vector2D& operator+=(const Vector2D& other);
     Vector2D& operator-=(const Vector2D& other);

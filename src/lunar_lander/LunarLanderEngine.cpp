@@ -3,9 +3,7 @@
 #include "lunar_lander/LunarLanderEngine.h"
 
 LunarLanderEngine::LunarLanderEngine()
-    : BaseEngine(SCREEN_HEIGHT, SCREEN_WIDTH)
-{
-};
+    : BaseEngine(SCREEN_HEIGHT, SCREEN_WIDTH) { };
 
 bool LunarLanderEngine::loadMedia()
 {
@@ -18,14 +16,14 @@ bool LunarLanderEngine::loadMedia()
 }
 
 bool LunarLanderEngine::create()
-{   
+{
     generateTerrain();
     spawnPlayer();
     return true;
 }
 
 bool LunarLanderEngine::update()
-{   
+{
     // Handle events on queue
     while (SDL_PollEvent(&mEvent) != 0)
     {
@@ -57,12 +55,13 @@ bool LunarLanderEngine::update()
 
     // Handle physics
     mPlayer.updatePhysics();
+    mPlayer.checkBoundaryCollision(mScreenWidth, mScreenHeight);
 
     return true;
 }
 
 bool LunarLanderEngine::render()
-{   
+{
     // render terrain
     SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 255);
     SDL_RenderClear(mRenderer.get());
@@ -71,11 +70,12 @@ bool LunarLanderEngine::render()
     {
         bool drawn { false };
         size_t y { 0 };
-        while ( !drawn )
+        while (!drawn)
         {
             if (mTerrain[y][x] == 1)
             {
-                SDL_RenderDrawPoint(mRenderer.get(), static_cast<int>(x), static_cast<int>(y));
+                SDL_RenderDrawPoint(mRenderer.get(), static_cast<int>(x),
+                    static_cast<int>(y));
                 drawn = true;
             }
             y++;
@@ -84,7 +84,7 @@ bool LunarLanderEngine::render()
 
     // render the player
     mPlayer.render();
-    
+
     return true;
 }
 
@@ -97,9 +97,9 @@ bool LunarLanderEngine::generateTerrain()
         static_cast<size_t>(mScreenHeight),
         static_cast<int>(mScreenHeight * TERRAIN_HEIGHT_VARIATION),
         static_cast<int>(mScreenHeight * TERRAIN_START_HEIGHT),
-        PERLIN_OCTAVES,                        
-        PERLIN_PERSISTENCE,               
-        PERLIN_FREQUENCY               
+        PERLIN_OCTAVES,
+        PERLIN_PERSISTENCE,
+        PERLIN_FREQUENCY
     };
     std::cout << "Generating terrain" << std::endl;
     mTerrainGenerator.generateTerrain(mTerrain, config);
@@ -107,7 +107,7 @@ bool LunarLanderEngine::generateTerrain()
 }
 
 bool LunarLanderEngine::spawnPlayer()
-{   
+{
     std::cout << "Spawning player" << std::endl;
     mPlayer = Spaceship(100, 100, mTextures.at(SPACESHIP_TEXTURE).get());
     return true;
