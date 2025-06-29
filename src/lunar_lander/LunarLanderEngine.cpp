@@ -93,13 +93,13 @@ bool LunarLanderEngine::generateTerrain()
     // TODO config this somewhere sensible
     // Initialise the terrain data structure
     TerrainGenerationConfig config {
-        static_cast<size_t>(mScreenWidth),          // worldWidth
-        static_cast<size_t>(mScreenHeight),         // worldHeight
-        static_cast<int>(mScreenHeight * 0.7),      // heightVariation
-        static_cast<int>(mScreenHeight * 0.5),      // startHeight
-        4,                                          // octaves
-        0.5,                                        // persistence
-        0.0025                                      // frequency
+        static_cast<size_t>(mScreenWidth),
+        static_cast<size_t>(mScreenHeight),
+        static_cast<int>(mScreenHeight * TERRAIN_HEIGHT_VARIATION),
+        static_cast<int>(mScreenHeight * TERRAIN_START_HEIGHT),
+        PERLIN_OCTAVES,                        
+        PERLIN_PERSISTENCE,               
+        PERLIN_FREQUENCY               
     };
     std::cout << "Generating terrain" << std::endl;
     mTerrainGenerator.generateTerrain(mTerrain, config);
