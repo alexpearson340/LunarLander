@@ -56,11 +56,24 @@ bool LunarLanderEngine::update()
     {
         mPlayer.rotate(ROTATION_SPEED);
     }
+    // if (keyState[SDL_SCANCODE_UP])
+    // {
+    //     mPlayer.alignVertical(ROTATION_SPEED);
+    // }
+
+    // Handle holding down space to thrust, otherwise thrust decays
+    if (keyState[SDL_SCANCODE_SPACE])
+    {
+        mPlayer.thrustIncrease();
+    }
+    else
+    {
+        mPlayer.thrustDecay();
+    }
 
     // Handle physics
     mPlayer.updatePhysics();
     mPlayer.checkBoundaryCollision(mScreenWidth, mScreenHeight);
-
     return true;
 }
 

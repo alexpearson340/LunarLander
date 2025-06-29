@@ -4,12 +4,14 @@
 #include <string>
 
 // TODO
-constexpr int SCREEN_WIDTH { 1080 };
-constexpr int SCREEN_HEIGHT { 720 };
+constexpr int SCREEN_WIDTH { 1350 };
+constexpr int SCREEN_HEIGHT { 900 };
 
 // Game variables
-constexpr int ROTATION_SPEED { 3 };
-constexpr float GRAVITY { 0.01f };
+constexpr int ROTATION_SPEED { 1 };
+constexpr float THRUST_UNIT { 0.005f };
+constexpr float MAX_THRUST { 7 * THRUST_UNIT };
+constexpr float GRAVITY { 5 * THRUST_UNIT };
 
 // Terrain generation
 constexpr float TERRAIN_START_HEIGHT { 0.3f };       // fraction of SCREEN_HEIGHT where terrain gen starts

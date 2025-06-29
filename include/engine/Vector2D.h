@@ -9,9 +9,13 @@ public:
 
     float getX() const { return mX; }
     float getY() const { return mY; }
+    float getMagnitude() const;
+    float getAngleDegrees() const;
 
     void setX(const float x) { mX = x; };
     void setY(const float y) { mY = y; };
+    void setMagnitude(float magnitude);
+    void rotateTo(float degrees);
     
     Vector2D& operator+=(const Vector2D& other);
     Vector2D& operator-=(const Vector2D& other);
