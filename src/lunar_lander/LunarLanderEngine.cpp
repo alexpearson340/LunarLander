@@ -58,7 +58,7 @@ bool LunarLanderEngine::update()
     }
     if (!keyState[SDL_SCANCODE_LEFT] && !keyState[SDL_SCANCODE_RIGHT])
     {
-        mPlayer.alignVertical(ROTATION_SPEED);
+        mPlayer.alignVertical(ALIGNMENT_SPEED);
     }
 
     // Handle holding down space to thrust, otherwise thrust decays

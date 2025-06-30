@@ -8,7 +8,8 @@ constexpr int SCREEN_WIDTH { 1350 };
 constexpr int SCREEN_HEIGHT { 900 };
 
 // Game variables
-constexpr int ROTATION_SPEED { 1 };
+constexpr float ROTATION_SPEED { 1.0f };
+constexpr float ALIGNMENT_SPEED { 0.5f };
 constexpr float THRUST_UNIT { 0.005f };
 constexpr float MAX_THRUST { 10 * THRUST_UNIT };
 constexpr float GRAVITY { 5 * THRUST_UNIT };
