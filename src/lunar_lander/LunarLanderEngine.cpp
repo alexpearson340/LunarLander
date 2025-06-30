@@ -56,10 +56,10 @@ bool LunarLanderEngine::update()
     {
         mPlayer.rotate(ROTATION_SPEED);
     }
-    // if (keyState[SDL_SCANCODE_UP])
-    // {
-    //     mPlayer.alignVertical(ROTATION_SPEED);
-    // }
+    if (!keyState[SDL_SCANCODE_LEFT] && !keyState[SDL_SCANCODE_RIGHT])
+    {
+        mPlayer.alignVertical(ROTATION_SPEED);
+    }
 
     // Handle holding down space to thrust, otherwise thrust decays
     if (keyState[SDL_SCANCODE_SPACE])
@@ -85,17 +85,14 @@ bool LunarLanderEngine::render()
     SDL_SetRenderDrawColor(mRenderer.get(), 255, 255, 255, 255);
     for (size_t x = 0; x < mTerrain[0].size(); x++)
     {
-        bool drawn { false };
-        size_t y { 0 };
-        while (!drawn)
+        for (size_t y = 0; y < mTerrain.size(); y++)
         {
             if (mTerrain[y][x] == 1)
             {
                 SDL_RenderDrawPoint(mRenderer.get(), static_cast<int>(x),
                     static_cast<int>(y));
-                drawn = true;
+                break; // Only draw the topmost terrain pixel
             }
-            y++;
         }
     }
 

@@ -10,7 +10,7 @@ constexpr int SCREEN_HEIGHT { 900 };
 // Game variables
 constexpr int ROTATION_SPEED { 1 };
 constexpr float THRUST_UNIT { 0.005f };
-constexpr float MAX_THRUST { 7 * THRUST_UNIT };
+constexpr float MAX_THRUST { 10 * THRUST_UNIT };
 constexpr float GRAVITY { 5 * THRUST_UNIT };
 
 // Terrain generation

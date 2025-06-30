@@ -1,7 +1,6 @@
 #include "engine/Vector2D.h"
 #include <gtest/gtest.h>
 
-// Test fixture for Block tests
 class Vector2DTest : public ::testing::Test
 {
 protected:

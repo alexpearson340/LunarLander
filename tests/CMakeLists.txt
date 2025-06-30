@@ -5,6 +5,7 @@ endif(CMAKE_HOST_WIN32 )
 add_executable(
   lunar_lander_tests
   test_main.cpp
+  test_spaceship.cpp
   test_vector_2d.cpp
 )
 

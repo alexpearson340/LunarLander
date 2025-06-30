@@ -11,6 +11,7 @@ public:
     Spaceship();
     Spaceship(int x, int y, Texture* texture);
 
+    float getNoseAngle() const { return mNoseAngle; };
     void rotate(const float);
     void alignVertical(const float);
     void thrustIncrease();

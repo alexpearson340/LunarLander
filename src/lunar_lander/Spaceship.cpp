@@ -1,6 +1,7 @@
 #include "lunar_lander/Spaceship.h"
 #include "lunar_lander/Constants.h"
 #include <iostream>
+#include <cassert>
 
 Spaceship::Spaceship()
     : mNoseAngle { 0 }
@@ -30,33 +31,36 @@ Spaceship::Spaceship(int x, int y, Texture* texture)
 
 void Spaceship::rotate(const float angle)
 {
+    assert(angle >= -360.0f && angle <= 360.0f);
     mNoseAngle += angle;
-    if ((mNoseAngle + angle) > 360.0f)
+    if (mNoseAngle >= 360.0f)
     {
         mNoseAngle -= 360.0f;
     }
-    if ((mNoseAngle + angle) < 0.0f)
+    if (mNoseAngle < 0.0f)
     {
         mNoseAngle += 360.0f;
     }
+    assert(mNoseAngle >= 0.0f && mNoseAngle < 360.0f);
     mThrust.rotateTo(mNoseAngle);
 }
 
-// void Spaceship::alignVertical(const float angle)
-// {   
-//     if (std::fabs(mNoseAngle) <= angle)
-//     {
-//         rotate(-mNoseAngle);
-//     }
-//     else if (mNoseAngle < 0)
-//     {
-//         rotate(angle);
-//     }
-//     else if (mNoseAngle > 0)
-//     {
-//         rotate(-angle);
-//     }
-// }
+void Spaceship::alignVertical(const float angle)
+{   
+    assert(mNoseAngle >= 0.0f && mNoseAngle < 360.0f);
+    if (std::fabs(mNoseAngle) <= angle)
+    {
+        rotate(-mNoseAngle);
+    }
+    else if (mNoseAngle > 180.0f)
+    {
+        rotate(std::fabs(angle));
+    }
+    else
+    {
+        rotate(-std::fabs(angle));
+    }
+}
 
 void Spaceship::thrustIncrease()
 {
@@ -78,12 +82,6 @@ void Spaceship::thrustIncrease()
     {
         mThrust.setMagnitude(mMaxThrust);
     }
-    // TODO
-    std::cout << "mThrust.getX() " << mThrust.getX() << std::endl;
-    std::cout << "mThrust.getY() " << mThrust.getY() << std::endl;
-    std::cout << "mThrust.getMagnitude() " << mThrust.getMagnitude() << std::endl;
-    std::cout << "mThrust.getAngleDegrees() " << mThrust.getAngleDegrees() << std::endl;
-    std::cout << "mNoseAngle " << mNoseAngle << std::endl;
 }
 
 void Spaceship::thrustDecay()
