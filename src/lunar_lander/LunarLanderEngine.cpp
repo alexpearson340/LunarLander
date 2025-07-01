@@ -19,6 +19,7 @@ bool LunarLanderEngine::create()
 {
     generateTerrain();
     spawnPlayer();
+    createHeadsUpDisplay();
     return true;
 }
 
@@ -39,8 +40,7 @@ bool LunarLanderEngine::update()
             {
             // regenerate the game - debugging convenience
             case SDLK_r:
-                generateTerrain();
-                spawnPlayer();
+                create();
                 break;
             }
         }
@@ -74,6 +74,7 @@ bool LunarLanderEngine::update()
     // Handle physics
     mPlayer.updatePhysics();
     mPlayer.checkBoundaryCollision(mScreenWidth, mScreenHeight);
+    mHeadsUpDisplay.update(mPlayer.getFlightStats());
     return true;
 }
 
@@ -98,6 +99,7 @@ bool LunarLanderEngine::render()
 
     // render the player
     mPlayer.render();
+    mHeadsUpDisplay.render();
 
     return true;
 }
@@ -115,6 +117,7 @@ bool LunarLanderEngine::generateTerrain()
         PERLIN_PERSISTENCE,
         PERLIN_FREQUENCY
     };
+    // todo printf
     std::cout << "Generating terrain" << std::endl;
     mTerrainGenerator.generateTerrain(mTerrain, config);
     return true;
@@ -122,7 +125,16 @@ bool LunarLanderEngine::generateTerrain()
 
 bool LunarLanderEngine::spawnPlayer()
 {
+    // todo printf
     std::cout << "Spawning player" << std::endl;
     mPlayer = Spaceship(100, 100, mTextures.at(SPACESHIP_TEXTURE).get());
+    return true;
+}
+
+bool LunarLanderEngine::createHeadsUpDisplay()
+{
+    // todo printf
+    std::cout << "Creating heads up display" << std::endl;
+    mHeadsUpDisplay = HeadsUpDisplay(mScreenHeight, mScreenWidth, mRenderer.get(), mFont.get());
     return true;
 }

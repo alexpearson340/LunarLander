@@ -5,6 +5,7 @@
 #include "lunar_lander/Constants.h"
 #include "lunar_lander/Spaceship.h"
 #include "lunar_lander/TerrainGenerator.h"
+#include "lunar_lander/HeadsUpDisplay.h"
 
 class LunarLanderEngine : public BaseEngine
 {
@@ -19,10 +20,12 @@ private:
 
     bool generateTerrain();
     bool spawnPlayer();
+    bool createHeadsUpDisplay();
 
     std::vector<std::vector<int>> mTerrain;
     Spaceship mPlayer;
     TerrainGenerator mTerrainGenerator;
+    HeadsUpDisplay mHeadsUpDisplay;
 };
 
 #endif // LUNARLANDERENGINE_H
