@@ -40,7 +40,7 @@ struct SDLFontDeleter
 class BaseEngine
 {
 public:
-    BaseEngine(int, int);
+    BaseEngine(int, int, std::string);
     virtual ~BaseEngine();
 
     // We dont support copy constructor, copy assignment, move constructor, move assignment
@@ -55,6 +55,7 @@ public:
 protected:
     const int mScreenHeight;
     const int mScreenWidth;
+    std::string mDisplayTitle; 
 
     // Starts up SDL and creates window
     bool init();
@@ -68,7 +69,7 @@ protected:
     // Loads the textures at the file path
     bool loadTexture(const std::string_view);
     bool loadFont(const std::string_view);
-
+    void setWindowTitle();
 
     // Frees media and shuts down SDL
     void close();

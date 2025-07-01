@@ -3,7 +3,7 @@
 #include "lunar_lander/LunarLanderEngine.h"
 
 LunarLanderEngine::LunarLanderEngine()
-    : BaseEngine(SCREEN_HEIGHT, SCREEN_WIDTH) { };
+    : BaseEngine(SCREEN_HEIGHT, SCREEN_WIDTH, DISPLAY_TITLE) { };
 
 bool LunarLanderEngine::loadMedia()
 {

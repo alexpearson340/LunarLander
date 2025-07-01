@@ -4,9 +4,10 @@
 #include <cassert>
 #include <memory>
 
-BaseEngine::BaseEngine(const int screenHeight, const int screenWidth)
+BaseEngine::BaseEngine(const int screenHeight, const int screenWidth, std::string displayTitle)
     : mScreenHeight { screenHeight }
     , mScreenWidth { screenWidth }
+    , mDisplayTitle { displayTitle }
     , mWindow { nullptr }
     , mRenderer { nullptr }
     , mFont { nullptr }
@@ -45,7 +46,7 @@ bool BaseEngine::init()
 
         // Create window
         printf("Creating SDL window\n");
-        mWindow.reset(SDL_CreateWindow("todo",
+        mWindow.reset(SDL_CreateWindow(mDisplayTitle.c_str(),
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
             mScreenWidth,
@@ -134,6 +135,11 @@ bool BaseEngine::loadFont(const std::string_view fileName)
     return success;
 }
 
+void BaseEngine::setWindowTitle()
+{
+    std::string title = mDisplayTitle + " - FPS: " + std::to_string(mFps);
+    SDL_SetWindowTitle(mWindow.get(), title.c_str());
+}
 
 void BaseEngine::close()
 {
@@ -184,6 +190,7 @@ int BaseEngine::run(int argc, char* args[])
                     mFps = mFrameCount;
                     mFrameCount = 0;
                     mElapsedTime = SDL_GetTicks();
+                    setWindowTitle();
                 }
 
                 // Update game state objects

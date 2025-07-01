@@ -6,6 +6,7 @@
 // TODO
 constexpr int SCREEN_WIDTH { 1350 };
 constexpr int SCREEN_HEIGHT { 900 };
+const std::string DISPLAY_TITLE { "Lunar Lander" };
 
 // Game variables
 constexpr float ROTATION_SPEED { 1.0f };
