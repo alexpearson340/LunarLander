@@ -142,6 +142,20 @@ void Spaceship::checkBoundaryCollision(int screenWidth, int screenHeight)
     }
 }
 
+FlightStats Spaceship::getFlightStats() const
+{
+    return FlightStats {
+        mNoseAngle,
+        mPosition.getX(),
+        mPosition.getY(),
+        mVelocity.getX(),
+        mVelocity.getY(),
+        mAcceleration.getX(),
+        mAcceleration.getY(),
+        mThrust.getMagnitude()
+    };
+}
+
 void Spaceship::render() const
 {
     mTexture->render(static_cast<int>(mPosition.getX()),

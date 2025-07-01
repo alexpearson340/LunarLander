@@ -2,6 +2,7 @@
 #define SPACESHIP_H
 
 #include "engine/Vector2D.h"
+#include "lunar_lander/FlightStats.h"
 #include <SDL.h>
 #include <engine/Texture.h>
 
@@ -12,6 +13,7 @@ public:
     Spaceship(int x, int y, Texture* texture);
 
     float getNoseAngle() const { return mNoseAngle; };
+    FlightStats getFlightStats() const;
     void rotate(const float);
     void alignVertical(const float);
     void thrustIncrease();
