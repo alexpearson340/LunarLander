@@ -37,8 +37,6 @@ void HeadsUpDisplay::update(const FlightStats stats)
     updateDisplayField(formatFloat(stats.yPos), FlightStatTexture::Y_POS);
     updateDisplayField(formatFloat(stats.xVel), FlightStatTexture::X_VEL);
     updateDisplayField(formatFloat(stats.yVel), FlightStatTexture::Y_VEL);
-    updateDisplayField(formatFloat(stats.xAccel), FlightStatTexture::X_ACCEL);
-    updateDisplayField(formatFloat(stats.yAccel), FlightStatTexture::Y_ACCEL);
     updateDisplayField(formatFloat(stats.thrustUnits), FlightStatTexture::THRUST_UNITS);
 }
 

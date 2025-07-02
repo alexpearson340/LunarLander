@@ -32,22 +32,18 @@ private:
         Y_POS,
         X_VEL,
         Y_VEL,
-        X_ACCEL,
-        Y_ACCEL,
         THRUST_UNITS,
         TOTAL
     };
 
     // compile time computed display strings, and offset
     static constexpr std::array<std::string_view, static_cast<size_t>(FlightStatTexture::TOTAL)> DISPLAY_NAMES {
-        " angle: ",
-        " x pos: ",
-        " y pos: ",
-        " x vel: ",
-        " y vel: ",
-        " x acc: ",
-        " y acc: ",
-        "thrust: "
+        "Angle: ",
+        "X Pos: ",
+        "Y Pos: ",
+        "X Vel: ",
+        "Y Vel: ",
+        "Thrust: "
     };
     // the length of the longest display name, plus some chars for the dynamic data
     // multiplied by an estimate of the number of pixels used per char
