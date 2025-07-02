@@ -8,8 +8,8 @@ struct FlightStats
     float yPos;
     float xVel;
     float yVel;
-    float xAcceleration;
-    float yAcceleration;
+    float xAccel;
+    float yAccel;
     float thrustUnits;
 };
 

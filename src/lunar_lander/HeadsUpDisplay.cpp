@@ -14,10 +14,16 @@ HeadsUpDisplay::HeadsUpDisplay()
 HeadsUpDisplay::HeadsUpDisplay(const int screenHeight, const int screenWidth, SDL_Renderer * renderer, TTF_Font * font)
     : mScreenHeight { screenHeight }
     , mScreenWidth { screenWidth }
-    , mTextures { std::vector<std::unique_ptr<Texture>>(static_cast<size_t>(FlightStatTextures::TOTAL)) }
+    , mTextures { std::vector<std::unique_ptr<Texture>>(static_cast<size_t>(FlightStatTexture::TOTAL)) }
     , mRenderer { renderer }
     , mFont { font }
 {
+    create();
+}
+
+void HeadsUpDisplay::create()
+{   
+    // make a texture for each display field
     for (auto& texture : mTextures)
     {
         texture = std::make_unique<Texture>(mRenderer, mFont);
@@ -26,15 +32,40 @@ HeadsUpDisplay::HeadsUpDisplay(const int screenHeight, const int screenWidth, SD
 
 void HeadsUpDisplay::update(const FlightStats stats)
 {   
-    // todo hard coded
-    std::string text { "Nose Angle " + std::to_string(stats.noseAngle) };
-    mTextures.at(static_cast<size_t>(FlightStatTextures::NOSE_ANGLE)).get()->loadFromRenderedText(text, mTextColour, mBackgroundColour);
+    updateDisplayField(formatFloat(stats.noseAngle), FlightStatTexture::NOSE_ANGLE);
+    updateDisplayField(formatFloat(stats.xPos), FlightStatTexture::X_POS);
+    updateDisplayField(formatFloat(stats.yPos), FlightStatTexture::Y_POS);
+    updateDisplayField(formatFloat(stats.xVel), FlightStatTexture::X_VEL);
+    updateDisplayField(formatFloat(stats.yVel), FlightStatTexture::Y_VEL);
+    updateDisplayField(formatFloat(stats.xAccel), FlightStatTexture::X_ACCEL);
+    updateDisplayField(formatFloat(stats.yAccel), FlightStatTexture::Y_ACCEL);
+    updateDisplayField(formatFloat(stats.thrustUnits), FlightStatTexture::THRUST_UNITS);
+}
+
+
+void HeadsUpDisplay::updateDisplayField(const std::string & text, FlightStatTexture index)
+{
+    mTextures.at(static_cast<size_t>(index)).get()->loadFromRenderedText(
+        std::string(DISPLAY_NAMES.at(static_cast<size_t>(index))) + text, 
+        mTextColour, 
+        mBackgroundColour
+    );
+}
+
+std::string HeadsUpDisplay::formatFloat(float value)
+{
+    std::ostringstream oss;
+    oss << std::fixed << std::setprecision(2) << value;
+    return oss.str();
 }
 
 void HeadsUpDisplay::render() const
 {   
-    // todo hard coded
-    int x { mScreenWidth - 300};
-    int y { mScreenHeight - mScreenHeight + 5 };
-    mTextures.at(static_cast<size_t>(FlightStatTextures::NOSE_ANGLE)).get()->render(x, y);
+    int x { mScreenWidth - X_DISPLAY_OFFSET};
+    int y { mScreenHeight - mScreenHeight + 1 };
+    for (auto& texture : mTextures)
+    {
+        texture.get()->render(x, y);
+        y += Y_DISPLAY_OFFSET;
+    }
 }
