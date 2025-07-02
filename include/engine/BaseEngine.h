@@ -2,6 +2,7 @@
 #define BASEENGINE_H
 
 #include "engine/Texture.h"
+#include "engine/Timer.h"
 #include <memory>
 #include <sstream>
 
@@ -90,7 +91,7 @@ protected:
     bool mPlaying; // the playable part of the game is running or not
 
     // Counters
-    Uint32 mElapsedTime;
+    Timer mFpsUpdateTimer{1000};  // Update FPS every 1000ms
     Uint32 mFrameCount;
     Uint32 mScore;
     int mFps;

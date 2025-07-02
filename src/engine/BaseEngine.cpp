@@ -13,7 +13,6 @@ BaseEngine::BaseEngine(const int screenHeight, const int screenWidth, std::strin
     , mFont { nullptr }
     , mQuit { false }
     , mPlaying { true }
-    , mElapsedTime { 0 }
     , mFrameCount { 0 }
     , mScore { 0 }
     , mFps { 0 }
@@ -173,8 +172,6 @@ int BaseEngine::run(int argc, char* args[])
         }
         else
         {
-            mElapsedTime = SDL_GetTicks();
-
             // Create the game state objects
             printf("Creating game state objects\n");
             create();
@@ -185,11 +182,10 @@ int BaseEngine::run(int argc, char* args[])
             {
                 // Increment counters
                 mFrameCount++;
-                if (SDL_GetTicks() - mElapsedTime > 1000)
+                if (mFpsUpdateTimer.shouldUpdate())
                 {
                     mFps = mFrameCount;
                     mFrameCount = 0;
-                    mElapsedTime = SDL_GetTicks();
                     setWindowTitle();
                 }
 

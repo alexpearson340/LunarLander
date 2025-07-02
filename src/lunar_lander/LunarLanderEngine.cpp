@@ -74,7 +74,12 @@ bool LunarLanderEngine::update()
     // Handle physics
     mPlayer.updatePhysics();
     mPlayer.checkBoundaryCollision(mScreenWidth, mScreenHeight);
-    mHeadsUpDisplay.update(mPlayer.getFlightStats());
+    
+    // Update HUD at controlled interval
+    if (mHudUpdateTimer.shouldUpdate()) {
+        mHeadsUpDisplay.update(mPlayer.getFlightStats());
+    }
+    
     return true;
 }
 

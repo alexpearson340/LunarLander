@@ -2,6 +2,7 @@
 #define LUNARLANDERENGINE_H
 
 #include "engine/BaseEngine.h"
+#include "engine/Timer.h"
 #include "lunar_lander/Constants.h"
 #include "lunar_lander/Spaceship.h"
 #include "lunar_lander/TerrainGenerator.h"
@@ -26,6 +27,7 @@ private:
     Spaceship mPlayer;
     TerrainGenerator mTerrainGenerator;
     HeadsUpDisplay mHeadsUpDisplay;
+    Timer mHudUpdateTimer{500};  // Update HUD every 500ms
 };
 
 #endif // LUNARLANDERENGINE_H
