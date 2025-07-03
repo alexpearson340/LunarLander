@@ -11,7 +11,7 @@ const std::string DISPLAY_TITLE { "Lunar Lander" };
 // Game variables
 constexpr float ROTATION_SPEED { 1.0f };
 constexpr float ALIGNMENT_SPEED { 0.0f };
-constexpr float GRAVITY { 0.005f };
+constexpr float GRAVITY { 0.01f };
 constexpr float MAX_THRUST { 4 * GRAVITY };
 constexpr float THRUST_UNIT { 0.1f * MAX_THRUST };
 

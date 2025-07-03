@@ -85,28 +85,56 @@ bool LunarLanderEngine::update()
 
 bool LunarLanderEngine::render()
 {
-    // render terrain
+    // render background
     SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 255);
     SDL_RenderClear(mRenderer.get());
-    SDL_SetRenderDrawColor(mRenderer.get(), 255, 255, 255, 255);
-    for (size_t x = 0; x < mTerrain[0].size(); x++)
-    {
-        for (size_t y = 0; y < mTerrain.size(); y++)
-        {
-            if (mTerrain[y][x] == 1)
-            {
-                SDL_RenderDrawPoint(mRenderer.get(), static_cast<int>(x),
-                    static_cast<int>(y));
-                break; // Only draw the topmost terrain pixel
-            }
-        }
-    }
 
-    // render the player
+    // render terrain
+    renderTerrain();
+    
+    // render objects
     mPlayer.render();
     mHeadsUpDisplay.render();
 
     return true;
+}
+
+bool LunarLanderEngine::renderTerrain()
+{
+    SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 255);    // black
+    SDL_RenderDrawPoints(mRenderer.get(), mForegroundPoints.data(), static_cast<int>(mForegroundPoints.size()));
+    
+    SDL_SetRenderDrawColor(mRenderer.get(), 255, 255, 255, 255);    // white
+    SDL_RenderDrawPoints(mRenderer.get(), mTerrainPoints.data(), static_cast<int>(mTerrainPoints.size()));
+    
+    return true;
+}
+
+void LunarLanderEngine::buildTerrainRenderData()
+{
+    mTerrainPoints.clear();
+    mForegroundPoints.clear();
+    
+    for (size_t x = 0; x < mTerrain[0].size(); x++)
+    {   
+        bool reachedForeground = false;
+        for (size_t y = 0; y < mTerrain.size(); y++)
+        {   
+            SDL_Point point {static_cast<int>(x), static_cast<int>(y)};
+            if (mTerrain[y][x] == 1)
+            {   
+                if (!reachedForeground)
+                {   
+                    mTerrainPoints.push_back(point);
+                    reachedForeground = true;
+                }
+                else
+                {
+                    mForegroundPoints.push_back(point);
+                }
+            }
+        }
+    }
 }
 
 bool LunarLanderEngine::generateTerrain()
@@ -125,6 +153,9 @@ bool LunarLanderEngine::generateTerrain()
     // todo printf
     std::cout << "Generating terrain" << std::endl;
     mTerrainGenerator.generateTerrain(mTerrain, config);
+    
+    // Build render points once
+    buildTerrainRenderData();
     return true;
 }
 

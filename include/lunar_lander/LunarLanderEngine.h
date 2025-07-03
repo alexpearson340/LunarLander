@@ -18,12 +18,16 @@ private:
     bool create() override;
     bool update() override;
     bool render() override;
-
+    
+    bool renderTerrain();
     bool generateTerrain();
+    void buildTerrainRenderData();
     bool spawnPlayer();
     bool createHeadsUpDisplay();
 
-    std::vector<std::vector<int>> mTerrain;
+    std::vector<std::vector<int>> mTerrain;     // for collision physics
+    std::vector<SDL_Point> mTerrainPoints;      // for more efficient rendering of the terrain line
+    std::vector<SDL_Point> mForegroundPoints;   // for more efficient rendering of foreground below the terrain line
     Spaceship mPlayer;
     TerrainGenerator mTerrainGenerator;
     HeadsUpDisplay mHeadsUpDisplay;

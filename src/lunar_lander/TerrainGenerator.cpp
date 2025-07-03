@@ -21,14 +21,15 @@ void TerrainGenerator::generateTerrain(std::vector<std::vector<int>> & terrain, 
             terrain[y][x] = 1;
         }
     }
+    std::cout << "World size x=" << terrain[0].size() << " y=" << terrain.size() << '\n';
 };
 
 void TerrainGenerator::initializeTerrain(std::vector<std::vector<int>> & terrain, const TerrainGenerationConfig config) const
 {
     terrain = std::vector<std::vector<int>>{};
     terrain.resize(config.worldHeight);
-    for (size_t x = 0; x < config.worldHeight; x++)
+    for (size_t y = 0; y < config.worldHeight; y++)
     {
-        terrain[x].resize(config.worldWidth, 0);
+        terrain[y].resize(config.worldWidth, 0);
     }
 };
