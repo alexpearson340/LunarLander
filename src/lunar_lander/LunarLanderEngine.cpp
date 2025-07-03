@@ -73,7 +73,7 @@ bool LunarLanderEngine::update()
 
     // Handle physics
     mPlayer.updatePhysics();
-    mPlayer.checkBoundaryCollision(mScreenWidth, mScreenHeight);
+    mPlayer.checkBoundaryCollision(WORLD_WIDTH, WORLD_HEIGHT);
     
     // Update HUD at controlled interval
     if (mHudUpdateTimer.shouldUpdate()) {
@@ -142,10 +142,10 @@ bool LunarLanderEngine::generateTerrain()
     // TODO config this somewhere sensible
     // Initialise the terrain data structure
     TerrainGenerationConfig config {
-        static_cast<size_t>(mScreenWidth),
-        static_cast<size_t>(mScreenHeight),
-        static_cast<int>(mScreenHeight * TERRAIN_HEIGHT_VARIATION),
-        static_cast<int>(mScreenHeight * TERRAIN_START_HEIGHT),
+        static_cast<size_t>(WORLD_WIDTH),
+        static_cast<size_t>(WORLD_HEIGHT),
+        static_cast<int>(WORLD_HEIGHT * TERRAIN_HEIGHT_VARIATION),
+        static_cast<int>(WORLD_HEIGHT * TERRAIN_START_HEIGHT),
         PERLIN_OCTAVES,
         PERLIN_PERSISTENCE,
         PERLIN_FREQUENCY

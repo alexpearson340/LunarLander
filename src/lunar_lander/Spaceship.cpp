@@ -117,7 +117,7 @@ SDL_Rect Spaceship::getBounds() const
         mTexture->getHeight() };
 }
 
-void Spaceship::checkBoundaryCollision(int screenWidth, int screenHeight)
+void Spaceship::checkBoundaryCollision(int worldWidth, int worldHeight)
 {
     SDL_Rect bounds = getBounds();
     if (bounds.x < 0)
@@ -125,9 +125,9 @@ void Spaceship::checkBoundaryCollision(int screenWidth, int screenHeight)
         mPosition.setX(0);
         mVelocity.setX(0);
     }
-    if (bounds.x + bounds.w >= screenWidth)
+    if (bounds.x + bounds.w >= worldWidth)
     {
-        mPosition.setX(screenWidth - bounds.w - 1);
+        mPosition.setX(worldWidth - bounds.w - 1);
         mVelocity.setX(0);
     }
     if (bounds.y < 0)
@@ -135,9 +135,9 @@ void Spaceship::checkBoundaryCollision(int screenWidth, int screenHeight)
         mPosition.setY(0);
         mVelocity.setY(0);
     }
-    if (bounds.y + bounds.h >= screenHeight)
+    if (bounds.y + bounds.h >= worldHeight)
     {
-        mPosition.setY(screenHeight - bounds.h - 1);
+        mPosition.setY(worldHeight - bounds.h - 1);
         mVelocity.setY(0);
     }
 }

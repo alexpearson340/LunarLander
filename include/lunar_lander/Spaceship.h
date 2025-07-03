@@ -20,7 +20,7 @@ public:
     void thrustDecay();
     void updatePhysics();
     SDL_Rect getBounds() const;
-    void checkBoundaryCollision(int screenWidth, int screenHeight);
+    void checkBoundaryCollision(int worldWidth, int worldHeight);
     void render() const;
 
 private:
