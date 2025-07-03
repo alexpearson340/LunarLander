@@ -33,6 +33,13 @@ Texture::~Texture()
     reset();
 }
 
+void Texture::setTexture(SDL_Texture * texture, const int width, const int height)
+{
+    mTexture.reset(texture);
+    mWidth = width;
+    mHeight = height;
+}
+
 bool Texture::loadFromFile(const std::string& path)
 {
     // The final texture
@@ -98,6 +105,11 @@ bool Texture::loadFromRenderedText(std::string textureText, SDL_Color textColor,
 
     mTexture.reset(newTexture);
     return true;
+}
+
+void Texture::setAsRenderingTarget()
+{
+    SDL_SetRenderTarget(mRenderer, mTexture.get());
 }
 
 void Texture::reset()

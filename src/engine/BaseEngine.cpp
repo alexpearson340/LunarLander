@@ -98,6 +98,35 @@ bool BaseEngine::init()
     return success;
 }
 
+bool BaseEngine::createTargetTexture(const std::string_view name, const int width, const int height)
+{
+    bool success = true;
+    printf("Creating %s x %s hardware texture with key %s\n", 
+        std::to_string(width).c_str(), 
+        std::to_string(height).c_str(), 
+        std::string(name).c_str()
+    );
+    SDL_Texture* renderTarget = SDL_CreateTexture(
+        mRenderer.get(),
+        SDL_PIXELFORMAT_RGBA8888,
+        SDL_TEXTUREACCESS_TARGET,
+        width,
+        height);
+    SDL_SetTextureBlendMode(renderTarget, SDL_BLENDMODE_BLEND);
+    
+    if (mTextures.find(name) != mTextures.end())
+    {
+        printf("Key %s has already been loaded to the textures map!\n", std::string(name).c_str());
+        success = false;
+    }
+    else
+    {
+        mTextures.emplace(name, std::make_unique<Texture>(mRenderer.get()));
+        mTextures.at(name).get()->setTexture(renderTarget, width, height);
+    }
+    return success;
+}
+
 bool BaseEngine::loadTexture(const std::string_view fileName)
 {
     bool success = true;

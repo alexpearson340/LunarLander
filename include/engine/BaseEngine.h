@@ -56,7 +56,7 @@ public:
 protected:
     const int mScreenHeight;
     const int mScreenWidth;
-    std::string mDisplayTitle; 
+    std::string mDisplayTitle;
 
     // Starts up SDL and creates window
     bool init();
@@ -68,6 +68,7 @@ protected:
     virtual bool render() = 0;
 
     // Loads the textures at the file path
+    bool createTargetTexture(const std::string_view, const int, const int);
     bool loadTexture(const std::string_view);
     bool loadFont(const std::string_view);
     void setWindowTitle();
@@ -91,7 +92,7 @@ protected:
     bool mPlaying; // the playable part of the game is running or not
 
     // Counters
-    Timer mFpsUpdateTimer{1000};  // Update FPS every 1000ms
+    Timer mFpsUpdateTimer { 1000 }; // Update FPS every 1000ms
     Uint32 mFrameCount;
     Uint32 mScore;
     int mFps;

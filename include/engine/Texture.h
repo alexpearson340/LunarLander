@@ -30,11 +30,17 @@ public:
     int getWidth() const { return mWidth; };
     int getHeight() const { return mHeight; };
 
+    // Set Texture to the passed value
+    void setTexture(SDL_Texture *, const int, const int);
+
     // Loads image at specified path
     bool loadFromFile(const std::string& path);
 
     // Creates image from font string
     bool loadFromRenderedText(std::string textureText, SDL_Color textColor, SDL_Color backgroundColour);
+
+    // Have SDL draw directly to the encapsulated Texture
+    void setAsRenderingTarget();
 
     // Deallocates texture
     void reset();

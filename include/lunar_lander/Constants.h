@@ -9,8 +9,8 @@ constexpr int SCREEN_HEIGHT { 900 };
 const std::string DISPLAY_TITLE { "Lunar Lander" };
 
 // World dimensions (actual game world size)
-constexpr int WORLD_WIDTH { SCREEN_WIDTH * 2 };
-constexpr int WORLD_HEIGHT { SCREEN_HEIGHT * 2 };
+constexpr int WORLD_WIDTH { SCREEN_WIDTH * 1 };
+constexpr int WORLD_HEIGHT { SCREEN_HEIGHT * 1 };
 
 // Game variables
 constexpr float ROTATION_SPEED { 1.0f };

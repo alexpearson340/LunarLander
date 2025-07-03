@@ -90,7 +90,7 @@ bool LunarLanderEngine::render()
     SDL_RenderClear(mRenderer.get());
 
     // render terrain
-    renderTerrain();
+    mTextures.at("terrain").get()->render(0, 0);
     
     // render objects
     mPlayer.render();
@@ -99,45 +99,7 @@ bool LunarLanderEngine::render()
     return true;
 }
 
-bool LunarLanderEngine::renderTerrain()
-{
-    SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 255);    // black
-    SDL_RenderDrawPoints(mRenderer.get(), mForegroundPoints.data(), static_cast<int>(mForegroundPoints.size()));
-    
-    SDL_SetRenderDrawColor(mRenderer.get(), 255, 255, 255, 255);    // white
-    SDL_RenderDrawPoints(mRenderer.get(), mTerrainPoints.data(), static_cast<int>(mTerrainPoints.size()));
-    
-    return true;
-}
-
-void LunarLanderEngine::buildTerrainRenderData()
-{
-    mTerrainPoints.clear();
-    mForegroundPoints.clear();
-    
-    for (size_t x = 0; x < mTerrain[0].size(); x++)
-    {   
-        bool reachedForeground = false;
-        for (size_t y = 0; y < mTerrain.size(); y++)
-        {   
-            SDL_Point point {static_cast<int>(x), static_cast<int>(y)};
-            if (mTerrain[y][x] == 1)
-            {   
-                if (!reachedForeground)
-                {   
-                    mTerrainPoints.push_back(point);
-                    reachedForeground = true;
-                }
-                else
-                {
-                    mForegroundPoints.push_back(point);
-                }
-            }
-        }
-    }
-}
-
-bool LunarLanderEngine::generateTerrain()
+void LunarLanderEngine::generateTerrain()
 {
     // TODO config this somewhere sensible
     // Initialise the terrain data structure
@@ -154,23 +116,64 @@ bool LunarLanderEngine::generateTerrain()
     std::cout << "Generating terrain" << std::endl;
     mTerrainGenerator.generateTerrain(mTerrain, config);
     
-    // Build render points once
-    buildTerrainRenderData();
-    return true;
+    createTerrainTexture();
 }
 
-bool LunarLanderEngine::spawnPlayer()
+void LunarLanderEngine::createTerrainTexture()
+{
+    // create an in memory Texture and set it as the rendering target
+    createTargetTexture("terrain", static_cast<int>(mTerrain[0].size()), static_cast<int>(mTerrain.size()));
+    mTextures.at("terrain").get()->setAsRenderingTarget();
+
+    // determine which points are foreground, terrain, or background
+    std::vector<SDL_Point> foregroundPoints {};     // these are opaque black
+    std::vector<SDL_Point> terrainPoints {};        // these are opaque white
+    for (size_t x = 0; x < mTerrain[0].size(); x++)
+    {   
+        bool reachedForeground = false;
+        for (size_t y = 0; y < mTerrain.size(); y++)
+        {   
+            SDL_Point point {static_cast<int>(x), static_cast<int>(y)};
+            if (mTerrain[y][x] == 1)
+            {   
+                if (!reachedForeground)
+                {   
+                    terrainPoints.push_back(point);
+                    reachedForeground = true;
+                }
+                else
+                {
+                    foregroundPoints.push_back(point);
+                }
+            }
+        }
+    }
+    // fill the target texture with a transparent base (so that the background will show through it)
+    SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 0);
+    SDL_RenderClear(mRenderer.get());
+
+    // set the foregound pixels to opaque black
+    SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 255);
+    SDL_RenderDrawPoints(mRenderer.get(), foregroundPoints.data(), static_cast<int>(foregroundPoints.size()));
+    
+    // set the terrain horizon line to opaque white
+    SDL_SetRenderDrawColor(mRenderer.get(), 255, 255, 255, 255);
+    SDL_RenderDrawPoints(mRenderer.get(), terrainPoints.data(), static_cast<int>(terrainPoints.size()));
+
+    // return the render target to the screen itself
+    SDL_SetRenderTarget(mRenderer.get(), nullptr);
+}
+
+void LunarLanderEngine::spawnPlayer()
 {
     // todo printf
     std::cout << "Spawning player" << std::endl;
     mPlayer = Spaceship(100, 100, mTextures.at(SPACESHIP_TEXTURE).get());
-    return true;
 }
 
-bool LunarLanderEngine::createHeadsUpDisplay()
+void LunarLanderEngine::createHeadsUpDisplay()
 {
     // todo printf
     std::cout << "Creating heads up display" << std::endl;
     mHeadsUpDisplay = HeadsUpDisplay(mScreenHeight, mScreenWidth, mRenderer.get(), mFont.get());
-    return true;
 }
