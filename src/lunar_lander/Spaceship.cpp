@@ -156,8 +156,7 @@ FlightStats Spaceship::getFlightStats() const
     };
 }
 
-void Spaceship::render() const
+void Spaceship::render(const int x, const int y) const
 {
-    mTexture->render(static_cast<int>(mPosition.getX()),
-        static_cast<int>(mPosition.getY()), NULL, static_cast<double>(mNoseAngle));
+    mTexture->render(x, y, NULL, static_cast<double>(mNoseAngle));
 }

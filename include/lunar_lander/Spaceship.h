@@ -12,7 +12,10 @@ public:
     Spaceship();
     Spaceship(int x, int y, Texture* texture);
 
+    float getX() const { return mPosition.getX(); };
+    float getY() const { return mPosition.getY(); };
     float getNoseAngle() const { return mNoseAngle; };
+
     FlightStats getFlightStats() const;
     void rotate(const float);
     void alignVertical(const float);
@@ -21,7 +24,7 @@ public:
     void updatePhysics();
     SDL_Rect getBounds() const;
     void checkBoundaryCollision(int worldWidth, int worldHeight);
-    void render() const;
+    void render(const int, const int) const;
 
 private:
     float mNoseAngle;
