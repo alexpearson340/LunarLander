@@ -19,6 +19,7 @@ bool LunarLanderEngine::loadMedia()
 bool LunarLanderEngine::create()
 {
     generateTerrain();
+    generateBackground();
     spawnPlayer();
     createHeadsUpDisplay();
     return true;
@@ -105,8 +106,9 @@ bool LunarLanderEngine::render()
     // render background
     SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 255);
     SDL_RenderClear(mRenderer.get());
-
-    // render terrain
+    
+    // render world
+    mTextures.at("starfield").get()->render(0, 0);
     mTextures.at("terrain").get()->render(terrainScreenX, terrainScreenY);
     
     // render objects
@@ -133,6 +135,16 @@ void LunarLanderEngine::generateTerrain()
     mTerrainGenerator.generateTerrain(mTerrain, config);
     
     createTerrainTexture();
+}
+
+void LunarLanderEngine::generateBackground()
+{
+    std::cout << "Generating starfield background" << std::endl;
+    mStarfieldGenerator.generateStarfield(SCREEN_WIDTH, SCREEN_HEIGHT, 1500);
+    
+    // Create starfield texture
+    createTargetTexture("starfield", WORLD_WIDTH, static_cast<int>((1 - TERRAIN_START_HEIGHT) * WORLD_HEIGHT));
+    mStarfieldGenerator.createStarfieldTexture(mRenderer.get(), *mTextures.at("starfield"));
 }
 
 void LunarLanderEngine::createTerrainTexture()

@@ -5,6 +5,7 @@
 #include "engine/Timer.h"
 #include "lunar_lander/Constants.h"
 #include "lunar_lander/Spaceship.h"
+#include "lunar_lander/StarfieldGenerator.h"
 #include "lunar_lander/TerrainGenerator.h"
 #include "lunar_lander/HeadsUpDisplay.h"
 
@@ -20,6 +21,7 @@ private:
     bool render() override;
     
     void generateTerrain();
+    void generateBackground();
     void createTerrainTexture();
     void spawnPlayer();
     void createHeadsUpDisplay();
@@ -27,6 +29,7 @@ private:
     std::vector<std::vector<int>> mTerrain;     // for collision physics
     Spaceship mPlayer;
     TerrainGenerator mTerrainGenerator;
+    StarfieldGenerator mStarfieldGenerator;
     HeadsUpDisplay mHeadsUpDisplay;
     Timer mHudUpdateTimer{500};  // Update HUD every 500ms
 };
