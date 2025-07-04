@@ -176,4 +176,5 @@ void LunarLanderEngine::createHeadsUpDisplay()
     // todo printf
     std::cout << "Creating heads up display" << std::endl;
     mHeadsUpDisplay = HeadsUpDisplay(mScreenHeight, mScreenWidth, mRenderer.get(), mFont.get());
+    mHeadsUpDisplay.update(mPlayer.getFlightStats());
 }

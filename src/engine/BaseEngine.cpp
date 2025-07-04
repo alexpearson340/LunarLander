@@ -114,16 +114,10 @@ bool BaseEngine::createTargetTexture(const std::string_view name, const int widt
         height);
     SDL_SetTextureBlendMode(renderTarget, SDL_BLENDMODE_BLEND);
     
-    if (mTextures.find(name) != mTextures.end())
-    {
-        printf("Key %s has already been loaded to the textures map!\n", std::string(name).c_str());
-        success = false;
-    }
-    else
-    {
-        mTextures.emplace(name, std::make_unique<Texture>(mRenderer.get()));
-        mTextures.at(name).get()->setTexture(renderTarget, width, height);
-    }
+    // if it already exists we are freeing and overwriting it
+    // we create these at runtime
+    mTextures[name] = std::make_unique<Texture>(mRenderer.get());
+    mTextures.at(name).get()->setTexture(renderTarget, width, height);
     return success;
 }
 
