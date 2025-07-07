@@ -22,7 +22,6 @@ private:
     
     void generateTerrain();
     void generateBackground();
-    void createTerrainTexture();
     void spawnPlayer();
     void createHeadsUpDisplay();
 

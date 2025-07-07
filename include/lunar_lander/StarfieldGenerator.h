@@ -20,7 +20,7 @@ public:
 
     StarfieldGenerator();
     void generateStarfield(int width, int height, size_t targetStars = 2000);
-    void createStarfieldTexture(SDL_Renderer* renderer, Texture& outTexture);
+    void createStarfieldTexture(SDL_Renderer* renderer, Texture* targetTexture);
 
 private:
     // Astronomical structure generators

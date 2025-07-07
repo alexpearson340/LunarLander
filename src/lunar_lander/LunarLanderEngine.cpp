@@ -134,7 +134,11 @@ void LunarLanderEngine::generateTerrain()
     std::cout << "Generating terrain" << std::endl;
     mTerrainGenerator.generateTerrain(mTerrain, config);
     
-    createTerrainTexture();
+    // Create terrain texture
+    createTargetTexture("terrain", static_cast<int>(mTerrain[0].size()), static_cast<int>(mTerrain.size()));
+
+    // Render terrain to the texture
+    mTerrainGenerator.createTerrainTexture(mRenderer.get(), mTextures.at("terrain").get(), mTerrain);
 }
 
 void LunarLanderEngine::generateBackground()
@@ -142,54 +146,11 @@ void LunarLanderEngine::generateBackground()
     std::cout << "Generating starfield background" << std::endl;
     mStarfieldGenerator.generateStarfield(SCREEN_WIDTH, SCREEN_HEIGHT, 1500);
     
-    // Create starfield texture
-    createTargetTexture("starfield", WORLD_WIDTH, static_cast<int>((1 - TERRAIN_START_HEIGHT) * WORLD_HEIGHT));
-    mStarfieldGenerator.createStarfieldTexture(mRenderer.get(), *mTextures.at("starfield"));
-}
-
-void LunarLanderEngine::createTerrainTexture()
-{
-    // create an in memory Texture and set it as the rendering target
-    createTargetTexture("terrain", static_cast<int>(mTerrain[0].size()), static_cast<int>(mTerrain.size()));
-    mTextures.at("terrain").get()->setAsRenderingTarget();
-
-    // determine which points are foreground, terrain, or background
-    std::vector<SDL_Point> foregroundPoints {};     // these are opaque black
-    std::vector<SDL_Point> terrainPoints {};        // these are opaque white
-    for (size_t x = 0; x < mTerrain[0].size(); x++)
-    {   
-        bool reachedForeground = false;
-        for (size_t y = 0; y < mTerrain.size(); y++)
-        {   
-            SDL_Point point {static_cast<int>(x), static_cast<int>(y)};
-            if (mTerrain[y][x] == 1)
-            {   
-                if (!reachedForeground)
-                {   
-                    terrainPoints.push_back(point);
-                    reachedForeground = true;
-                }
-                else
-                {
-                    foregroundPoints.push_back(point);
-                }
-            }
-        }
-    }
-    // fill the target texture with a transparent base (so that the background will show through it)
-    SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 0);
-    SDL_RenderClear(mRenderer.get());
-
-    // set the foregound pixels to opaque black
-    SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 255);
-    SDL_RenderDrawPoints(mRenderer.get(), foregroundPoints.data(), static_cast<int>(foregroundPoints.size()));
+     // Create starfield texture
+     createTargetTexture("starfield", static_cast<int>(SCREEN_WIDTH), static_cast<int>((1 - TERRAIN_START_HEIGHT) * SCREEN_HEIGHT));
     
-    // set the terrain horizon line to opaque white
-    SDL_SetRenderDrawColor(mRenderer.get(), 255, 255, 255, 255);
-    SDL_RenderDrawPoints(mRenderer.get(), terrainPoints.data(), static_cast<int>(terrainPoints.size()));
-
-    // return the render target to the screen itself
-    SDL_SetRenderTarget(mRenderer.get(), nullptr);
+     // Render stars to the texture
+     mStarfieldGenerator.createStarfieldTexture(mRenderer.get(), mTextures.at("starfield").get());
 }
 
 void LunarLanderEngine::spawnPlayer()

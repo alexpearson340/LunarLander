@@ -284,22 +284,13 @@ void StarfieldGenerator::addStar(int x, int y, double intensity, double baseSize
     mStars.emplace_back(Star { x, y, static_cast<Uint8>(brightness), size });
 }
 
-void StarfieldGenerator::createStarfieldTexture(SDL_Renderer* renderer, Texture& outTexture)
+void StarfieldGenerator::createStarfieldTexture(SDL_Renderer* renderer, Texture* targetTexture)
 {
-    SDL_Texture* renderTarget = SDL_CreateTexture(
-        renderer,
-        SDL_PIXELFORMAT_RGBA8888,
-        SDL_TEXTUREACCESS_TARGET,
-        mWidth, mHeight
-    );
-
-    if (!renderTarget) {
-        printf("Failed to create realistic starfield texture: %s\n", SDL_GetError());
-        return;
-    }
-
-    SDL_SetRenderTarget(renderer, renderTarget);
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black space
+    // Set the passed texture as render target
+    targetTexture->setAsRenderingTarget();
+    
+    // Clear with transparent background
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0); // Transparent background
     SDL_RenderClear(renderer);
 
     // Render stars with brightness variation
@@ -317,8 +308,6 @@ void StarfieldGenerator::createStarfieldTexture(SDL_Renderer* renderer, Texture&
         }
     }
 
+    // Return render target to screen
     SDL_SetRenderTarget(renderer, nullptr);
-
-    // Assuming your Texture class has a method to wrap existing SDL_Texture
-    outTexture.setTexture(renderTarget, mWidth, mHeight);
 }
