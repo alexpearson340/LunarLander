@@ -194,3 +194,31 @@ TEST_F(Vector2DTest, TestSetMagnitudePreservesAngle)
     vector.setMagnitude(10.0f);
     EXPECT_NEAR(vector.getAngleDegrees(), originalAngle, 0.001f);
 }
+
+TEST_F(Vector2DTest, TestMultiplyByFloat)
+{
+    Vector2D result { testVector * 2.5f };
+    EXPECT_NEAR(result.getX(), 2.5f, 0.001f);
+    EXPECT_NEAR(result.getY(), 2.5f, 0.001f);
+}
+
+TEST_F(Vector2DTest, TestInPlaceMultiplyByFloat)
+{
+    testVector *= 3.0f;
+    EXPECT_NEAR(testVector.getX(), 3.0f, 0.001f);
+    EXPECT_NEAR(testVector.getY(), 3.0f, 0.001f);
+}
+
+TEST_F(Vector2DTest, TestDivideByFloat)
+{
+    Vector2D result { otherVector / 2.0f };
+    EXPECT_NEAR(result.getX(), 1.0f, 0.001f);
+    EXPECT_NEAR(result.getY(), 1.5f, 0.001f);
+}
+
+TEST_F(Vector2DTest, TestInPlaceDivideByFloat)
+{
+    otherVector /= 2.0f;
+    EXPECT_NEAR(otherVector.getX(), 1.0f, 0.001f);
+    EXPECT_NEAR(otherVector.getY(), 1.5f, 0.001f);
+}

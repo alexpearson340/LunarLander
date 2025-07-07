@@ -21,6 +21,20 @@ Vector2D& Vector2D::operator-=(const Vector2D& other)
     return *this;
 }
 
+Vector2D& Vector2D::operator*=(const float scalar)
+{
+    mX *= scalar;
+    mY *= scalar;
+    return *this;
+}
+
+Vector2D& Vector2D::operator/=(const float scalar)
+{
+    mX /= scalar;
+    mY /= scalar;
+    return *this;
+}
+
 float Vector2D::getMagnitude() const
 {
     return std::sqrt(mX * mX + mY * mY);

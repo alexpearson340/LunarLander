@@ -17,8 +17,10 @@ public:
     void setMagnitude(float magnitude);
     void rotateTo(float degrees);
     
-    Vector2D& operator+=(const Vector2D& other);
-    Vector2D& operator-=(const Vector2D& other);
+    Vector2D& operator+=(const Vector2D&);
+    Vector2D& operator-=(const Vector2D&);
+    Vector2D& operator*=(const float);
+    Vector2D& operator/=(const float);
 
 private:
     float mX;
@@ -36,6 +38,20 @@ inline Vector2D operator-(const Vector2D& left, const Vector2D& right)
 {
     Vector2D result { left };
     result -= right;
+    return result;
+}
+
+inline Vector2D operator*(const Vector2D& left, const float scalar)
+{
+    Vector2D result { left };
+    result *= scalar;
+    return result;
+}
+
+inline Vector2D operator/(const Vector2D& left, const float scalar)
+{
+    Vector2D result { left };
+    result /= scalar;
     return result;
 }
 
