@@ -1,7 +1,7 @@
 #include "lunar_lander/Spaceship.h"
 #include "lunar_lander/Constants.h"
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 Spaceship::Spaceship()
     : mNoseAngle { 0 }
@@ -16,15 +16,15 @@ Spaceship::Spaceship()
 {
 }
 
-Spaceship::Spaceship(int x, int y, Texture* texture)
+Spaceship::Spaceship(int x, int y, Texture* texture, float gravity, float thrustUnit, float maxThrust)
     : mNoseAngle { 0 }
-    , mThrustUnit { THRUST_UNIT }
-    , mMaxThrust { MAX_THRUST }
+    , mThrustUnit { thrustUnit }
+    , mMaxThrust { maxThrust }
     , mPosition { static_cast<float>(x), static_cast<float>(y) }
     , mVelocity { 0, 0 }
     , mAcceleration { 0, 0 }
     , mThrust { 0, 0 }
-    , mGravity { 0, GRAVITY }
+    , mGravity { 0, gravity }
     , mTexture { texture }
 {
 }
@@ -46,7 +46,7 @@ void Spaceship::rotate(const float angle)
 }
 
 void Spaceship::alignVertical(const float angle)
-{   
+{
     assert(mNoseAngle >= 0.0f && mNoseAngle < 360.0f);
     if (std::fabs(mNoseAngle) <= angle)
     {
@@ -110,36 +110,84 @@ void Spaceship::updatePhysics()
     mPosition += mVelocity;
 }
 
-SDL_Rect Spaceship::getBounds() const
+SDL_Rect Spaceship::getDrawBounds() const
 {
-    return { static_cast<int>(mPosition.getX()),
-        static_cast<int>(mPosition.getY()), mTexture->getWidth(),
-        mTexture->getHeight() };
+    return {
+        static_cast<int>(mPosition.getX()),
+        static_cast<int>(mPosition.getY()),
+        mTexture->getWidth(),
+        mTexture->getHeight()
+    };
 }
 
-void Spaceship::checkBoundaryCollision(int worldWidth, int worldHeight)
+SDL_Rect Spaceship::getCollisionBounds() const
 {
-    SDL_Rect bounds = getBounds();
+    SDL_Rect drawBounds { getDrawBounds() };
+    return {
+        drawBounds.x + COLLISION_BOX_MARGIN,
+        drawBounds.y + COLLISION_BOX_MARGIN,
+        mTexture->getWidth() - (2 * COLLISION_BOX_MARGIN),
+        mTexture->getHeight() - (2 * COLLISION_BOX_MARGIN)
+    };
+}
+
+bool Spaceship::checkBoundaryCollision(int worldWidth, int worldHeight)
+{
+    SDL_Rect bounds = getDrawBounds();
+    bool collision = false;
+    
     if (bounds.x < 0)
     {
         mPosition.setX(0);
         mVelocity.setX(0);
+        collision = true;
     }
     if (bounds.x + bounds.w >= worldWidth)
     {
         mPosition.setX(worldWidth - bounds.w - 1);
         mVelocity.setX(0);
+        collision = true;
     }
     if (bounds.y < 0)
     {
         mPosition.setY(0);
         mVelocity.setY(0);
+        collision = true;
     }
     if (bounds.y + bounds.h >= worldHeight)
     {
         mPosition.setY(worldHeight - bounds.h - 1);
         mVelocity.setY(0);
+        collision = true;
     }
+    
+    return collision;
+}
+
+bool Spaceship::checkTerrainCollision(std::vector<std::vector<int>>& terrain)
+{
+    SDL_Rect bounds { getCollisionBounds() };
+    int startX { std::max(0, bounds.x) };
+    int startY { std::max(0, bounds.y) };
+    int endX { std::min(static_cast<int>(terrain.at(0).size()), (bounds.x + bounds.w)) };
+    int endY { std::min(static_cast<int>(terrain.size()), (bounds.y + bounds.h)) };
+
+    for (int y = startY; y != endY; y++)
+    {
+        for (int x = startX; x != endX; x++)
+        {
+            if (terrain[static_cast<size_t>(y)][static_cast<size_t>(x)] == 1)
+            {
+                Vector2D oppositeVelocity { mVelocity * -1.0f };
+                mPosition += oppositeVelocity;
+                mVelocity.setX(0);
+                mVelocity.setY(0);
+                return true;
+            }
+        }
+    }
+    
+    return false;
 }
 
 FlightStats Spaceship::getFlightStats() const

@@ -76,6 +76,7 @@ bool LunarLanderEngine::update()
     // Handle physics
     mPlayer.updatePhysics();
     mPlayer.checkBoundaryCollision(WORLD_WIDTH, WORLD_HEIGHT);
+    mPlayer.checkTerrainCollision(mTerrain);
     
     // Update HUD at controlled interval
     if (mHudUpdateTimer.shouldUpdate()) {
@@ -88,8 +89,8 @@ bool LunarLanderEngine::update()
 bool LunarLanderEngine::render()
 {   
     // Calculate desired camera position (world coordinates)
-    float cameraWorldX = mPlayer.getX() - (mScreenWidth / 2);
-    float cameraWorldY = mPlayer.getY() - (mScreenHeight / 2);
+    float cameraWorldX = mPlayer.getPosX() - (mScreenWidth / 2);
+    float cameraWorldY = mPlayer.getPosY() - (mScreenHeight / 2);
     
     // Clamp camera to world boundaries
     float clampedCameraX = std::clamp(cameraWorldX, 0.0f, static_cast<float>(WORLD_WIDTH - mScreenWidth));
@@ -100,8 +101,8 @@ bool LunarLanderEngine::render()
     int terrainScreenY = -static_cast<int>(clampedCameraY);
     
     // Calculate player screen position relative to clamped camera
-    int playerScreenX = static_cast<int>(mPlayer.getX() - clampedCameraX);
-    int playerScreenY = static_cast<int>(mPlayer.getY() - clampedCameraY);
+    int playerScreenX = static_cast<int>(mPlayer.getPosX() - clampedCameraX);
+    int playerScreenY = static_cast<int>(mPlayer.getPosY() - clampedCameraY);
 
     // render background
     SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 255);
@@ -161,7 +162,7 @@ void LunarLanderEngine::generateBackground()
 void LunarLanderEngine::spawnPlayer()
 {
     std::cout << "Spawning player" << std::endl;
-    mPlayer = Spaceship(100, 100, mTextures.at(SPACESHIP_TEXTURE).get());
+    mPlayer = Spaceship(100, 100, mTextures.at(SPACESHIP_TEXTURE).get(), GRAVITY, THRUST_UNIT, MAX_THRUST);
 }
 
 void LunarLanderEngine::createHeadsUpDisplay()

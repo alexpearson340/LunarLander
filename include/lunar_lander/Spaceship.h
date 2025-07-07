@@ -5,15 +5,20 @@
 #include "lunar_lander/FlightStats.h"
 #include <SDL.h>
 #include <engine/Texture.h>
+#include <vector>
+
+const int COLLISION_BOX_MARGIN { 4 };
 
 class Spaceship
 {
 public:
     Spaceship();
-    Spaceship(int x, int y, Texture* texture);
+    Spaceship(int x, int y, Texture* texture, float gravity, float thrustUnit, float maxThrust);
 
-    float getX() const { return mPosition.getX(); };
-    float getY() const { return mPosition.getY(); };
+    float getPosX() const { return mPosition.getX(); };
+    float getPosY() const { return mPosition.getY(); };
+    float getVelX() const { return mVelocity.getX(); };
+    float getVelY() const { return mVelocity.getY(); };
     float getNoseAngle() const { return mNoseAngle; };
 
     FlightStats getFlightStats() const;
@@ -22,8 +27,10 @@ public:
     void thrustIncrease();
     void thrustDecay();
     void updatePhysics();
-    SDL_Rect getBounds() const;
-    void checkBoundaryCollision(int worldWidth, int worldHeight);
+    SDL_Rect getDrawBounds() const;
+    SDL_Rect getCollisionBounds() const;
+    bool checkBoundaryCollision(int, int);
+    bool checkTerrainCollision(std::vector<std::vector<int>>&);
     void render(const int, const int) const;
 
 private:
@@ -38,7 +45,7 @@ private:
     Vector2D mThrust;
     Vector2D mGravity;
 
-    Texture* mTexture;
+    Texture* mTexture; 
 };
 
 #endif // SPACESHIP_H
