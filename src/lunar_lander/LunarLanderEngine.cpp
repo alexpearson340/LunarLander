@@ -108,7 +108,9 @@ bool LunarLanderEngine::render()
     SDL_RenderClear(mRenderer.get());
     
     // render world
-    mTextures.at("starfield").get()->render(0, 0);
+    mTextures.at("starfield").get()->render(
+        static_cast<int>(terrainScreenX * STARFIELD_PARALLAX_RATIO), 
+        static_cast<int>(terrainScreenY * STARFIELD_PARALLAX_RATIO));
     mTextures.at("terrain").get()->render(terrainScreenX, terrainScreenY);
     
     // render objects
@@ -143,11 +145,14 @@ void LunarLanderEngine::generateTerrain()
 
 void LunarLanderEngine::generateBackground()
 {
+    int starfieldWidth { static_cast<int>(SCREEN_WIDTH * (1 + STARFIELD_PARALLAX_RATIO)) };
+    int starfieldHeight { static_cast<int>(SCREEN_HEIGHT * (1 + STARFIELD_PARALLAX_RATIO)) };
+
     std::cout << "Generating starfield background" << std::endl;
-    mStarfieldGenerator.generateStarfield(SCREEN_WIDTH, SCREEN_HEIGHT, 1500);
+    mStarfieldGenerator.generateStarfield(starfieldWidth, starfieldHeight, 1500);
     
      // Create starfield texture
-     createTargetTexture("starfield", static_cast<int>(SCREEN_WIDTH), static_cast<int>((1 - TERRAIN_START_HEIGHT) * SCREEN_HEIGHT));
+    createTargetTexture("starfield", starfieldWidth, starfieldHeight);
     
      // Render stars to the texture
      mStarfieldGenerator.createStarfieldTexture(mRenderer.get(), mTextures.at("starfield").get());
