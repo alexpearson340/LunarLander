@@ -11,8 +11,8 @@ bool LunarLanderEngine::loadMedia()
     bool success = true;
     mTextures.clear();
 
-    // TODO - programmatically load textures in the assets dir
-    success = success && loadTexture("spaceship.bmp");
+    success = success && loadTexture( SPACESHIP_TEXTURE );
+    success = success && loadTexture( SPACESTATION_TEXTURE );
     return success;
 }
 
@@ -115,6 +115,12 @@ bool LunarLanderEngine::render()
     mTextures.at("terrain").get()->render(terrainScreenX, terrainScreenY);
     
     // render objects
+    // render spacestation at center of world width and terrain start height
+    float spacestationWorldX = WORLD_WIDTH / 2.0f;
+    float spacestationWorldY = WORLD_HEIGHT * (1.0f - TERRAIN_START_HEIGHT);
+    int spacestationScreenX = static_cast<int>(spacestationWorldX - clampedCameraX);
+    int spacestationScreenY = static_cast<int>(spacestationWorldY - clampedCameraY);
+    mTextures.at(SPACESTATION_TEXTURE).get()->render(spacestationScreenX, spacestationScreenY);
     mPlayer.render(playerScreenX, playerScreenY);
     mHeadsUpDisplay.render();
 
@@ -162,7 +168,9 @@ void LunarLanderEngine::generateBackground()
 void LunarLanderEngine::spawnPlayer()
 {
     std::cout << "Spawning player" << std::endl;
-    mPlayer = Spaceship(100, 100, mTextures.at(SPACESHIP_TEXTURE).get(), GRAVITY, THRUST_UNIT, MAX_THRUST);
+    int worldCenterX = WORLD_WIDTH / 2;
+    int worldCenterY = WORLD_HEIGHT / 2;
+    mPlayer = Spaceship(worldCenterX, worldCenterY, mTextures.at(SPACESHIP_TEXTURE).get(), GRAVITY, THRUST_UNIT, MAX_THRUST);
 }
 
 void LunarLanderEngine::createHeadsUpDisplay()

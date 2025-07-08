@@ -29,5 +29,6 @@ constexpr double PERLIN_FREQUENCY { 0.0025 };        // Perlin Noise 1D paramete
 
 // Different textures for blocks
 constexpr std::string_view SPACESHIP_TEXTURE { "spaceship.bmp" };
+constexpr std::string_view SPACESTATION_TEXTURE { "spacestation.bmp" };
 
 #endif // CONSTANTS_H
