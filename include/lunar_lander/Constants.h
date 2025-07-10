@@ -27,6 +27,10 @@ constexpr int PERLIN_OCTAVES { 4 };                  // Perlin Noise 1D paramete
 constexpr double PERLIN_PERSISTENCE { 0.5 };         // Perlin Noise 1D parameter 
 constexpr double PERLIN_FREQUENCY { 0.0025 };        // Perlin Noise 1D parameter
 
+// Landing pads
+constexpr unsigned int MIN_LANDING_PAD_WIDTH { 50 };
+constexpr unsigned int MAX_LANDING_PAD_WIDTH { 100 };
+
 // Different textures for blocks
 constexpr std::string_view SPACESHIP_TEXTURE { "spaceship.bmp" };
 constexpr std::string_view SPACESTATION_TEXTURE { "spacestation.bmp" };

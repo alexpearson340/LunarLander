@@ -4,7 +4,9 @@
 #include "lunar_lander/LunarLanderEngine.h"
 
 LunarLanderEngine::LunarLanderEngine()
-    : BaseEngine(SCREEN_HEIGHT, SCREEN_WIDTH, DISPLAY_TITLE) { };
+    : BaseEngine(SCREEN_HEIGHT, SCREEN_WIDTH, DISPLAY_TITLE) 
+    , mTerrainGenerator {std::random_device{}()}
+{ };
 
 bool LunarLanderEngine::loadMedia()
 {
@@ -141,7 +143,8 @@ void LunarLanderEngine::generateTerrain()
     };
     // todo printf
     std::cout << "Generating terrain" << std::endl;
-    mTerrainGenerator.generateTerrain(mTerrain, config);
+    mTerrainGenerator = TerrainGenerator(std::random_device{}());
+    mTerrainGenerator.generateTerrain(mTerrain, config, static_cast<int>(WORLD_WIDTH / SCREEN_WIDTH));
     
     // Create terrain texture
     createTargetTexture("terrain", static_cast<int>(mTerrain[0].size()), static_cast<int>(mTerrain.size()));
