@@ -199,7 +199,7 @@ bool Spaceship::handleTerrainCollision(std::vector<std::vector<int>>& terrain)
     {
         resetVelocity();
     }
-    return hitLandingPad;
+    return false;
 }
 
 FlightStats Spaceship::getFlightStats() const
@@ -218,7 +218,10 @@ FlightStats Spaceship::getFlightStats() const
 
 void Spaceship::render(const int x, const int y) const
 {
-    mTexture->render(x, y, NULL, static_cast<double>(mNoseAngle));
+    if (!mIsDestroyed)
+    {
+        mTexture->render(x, y, NULL, static_cast<double>(mNoseAngle));
+    }
 }
 
 void Spaceship::resetVelocity()
@@ -227,4 +230,14 @@ void Spaceship::resetVelocity()
     mPosition += oppositeVelocity;
     mVelocity.setX(0);
     mVelocity.setY(0);
+}
+
+void Spaceship::destroy()
+{
+    mIsDestroyed = true;
+}
+
+bool Spaceship::isDestroyed() const
+{
+    return mIsDestroyed;
 }

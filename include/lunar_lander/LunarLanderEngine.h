@@ -9,6 +9,11 @@
 #include "lunar_lander/TerrainGenerator.h"
 #include "lunar_lander/HeadsUpDisplay.h"
 
+enum class GameState {
+    PLAYING,
+    DEATH
+};
+
 class LunarLanderEngine : public BaseEngine
 {
 public:
@@ -24,6 +29,9 @@ private:
     void generateBackground();
     void spawnPlayer();
     void createHeadsUpDisplay();
+    
+    bool updatePlaying();
+    bool updateDeath();
 
     std::vector<std::vector<int>> mTerrain;     // for collision physics
     Spaceship mPlayer;
@@ -31,6 +39,8 @@ private:
     StarfieldGenerator mStarfieldGenerator;
     HeadsUpDisplay mHeadsUpDisplay;
     Timer mHudUpdateTimer{500};  // Update HUD every 500ms
+    
+    GameState mCurrentState = GameState::PLAYING;
 };
 
 #endif // LUNARLANDERENGINE_H

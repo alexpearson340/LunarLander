@@ -32,6 +32,9 @@ public:
     bool handleBoundaryCollision(int, int);
     bool handleTerrainCollision(std::vector<std::vector<int>>&);
     void render(const int, const int) const;
+    
+    void destroy();
+    bool isDestroyed() const;
 
 private:
     float mNoseAngle;
@@ -46,6 +49,7 @@ private:
     Vector2D mGravity;
 
     Texture* mTexture;
+    bool mIsDestroyed = false;
     
     void resetVelocity();
 };

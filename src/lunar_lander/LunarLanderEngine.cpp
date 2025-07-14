@@ -19,6 +19,7 @@ bool LunarLanderEngine::loadMedia()
 
 bool LunarLanderEngine::create()
 {
+    mCurrentState = GameState::PLAYING;
     generateTerrain();
     generateBackground();
     spawnPlayer();
@@ -27,6 +28,18 @@ bool LunarLanderEngine::create()
 }
 
 bool LunarLanderEngine::update()
+{
+    switch (mCurrentState) 
+    {
+        case GameState::PLAYING:
+            return updatePlaying();
+        case GameState::DEATH:
+            return updateDeath();
+    } 
+    return true;
+}
+
+bool LunarLanderEngine::updatePlaying()
 {
     // Handle events on queue
     while (SDL_PollEvent(&mEvent) != 0)
@@ -77,7 +90,13 @@ bool LunarLanderEngine::update()
     // Handle physics
     mPlayer.updatePhysics();
     mPlayer.handleBoundaryCollision(WORLD_WIDTH, WORLD_HEIGHT);
-    mPlayer.handleTerrainCollision(mTerrain);
+    
+    // Check for death-causing collision
+    if (mPlayer.handleTerrainCollision(mTerrain))
+    {
+        mPlayer.destroy();
+        mCurrentState = GameState::DEATH;
+    }
 
     // Update HUD at controlled interval
     if (mHudUpdateTimer.shouldUpdate())
@@ -85,6 +104,34 @@ bool LunarLanderEngine::update()
         mHeadsUpDisplay.update(mPlayer.getFlightStats());
     }
 
+    return true;
+}
+
+bool LunarLanderEngine::updateDeath()
+{
+    // Handle quit events and R key to restart
+    while (SDL_PollEvent(&mEvent) != 0)
+    {
+        if (mEvent.type == SDL_QUIT)
+        {
+            mQuit = true;
+        }
+        // If a key was pressed
+        else if (mEvent.type == SDL_KEYDOWN)
+        {
+            switch (mEvent.key.keysym.sym)
+            {
+            // R key exits death and restarts game
+            case SDLK_r:
+                create();
+                break;
+            }
+        }
+    }
+    
+    // TODO: Update explosion animation
+    // TODO: Check if death animation is complete, then transition to next state
+    
     return true;
 }
 
