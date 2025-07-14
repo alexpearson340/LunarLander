@@ -1,20 +1,19 @@
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 
 #include "lunar_lander/LunarLanderEngine.h"
 
 LunarLanderEngine::LunarLanderEngine()
-    : BaseEngine(SCREEN_HEIGHT, SCREEN_WIDTH, DISPLAY_TITLE) 
-    , mTerrainGenerator {std::random_device{}()}
-{ };
+    : BaseEngine(SCREEN_HEIGHT, SCREEN_WIDTH, DISPLAY_TITLE)
+    , mTerrainGenerator { std::random_device {}() } { };
 
 bool LunarLanderEngine::loadMedia()
 {
     bool success = true;
     mTextures.clear();
 
-    success = success && loadTexture( SPACESHIP_TEXTURE );
-    success = success && loadTexture( SPACESTATION_TEXTURE );
+    success = success && loadTexture(SPACESHIP_TEXTURE);
+    success = success && loadTexture(SPACESTATION_TEXTURE);
     return success;
 }
 
@@ -77,31 +76,32 @@ bool LunarLanderEngine::update()
 
     // Handle physics
     mPlayer.updatePhysics();
-    mPlayer.checkBoundaryCollision(WORLD_WIDTH, WORLD_HEIGHT);
-    mPlayer.checkTerrainCollision(mTerrain);
-    
+    mPlayer.handleBoundaryCollision(WORLD_WIDTH, WORLD_HEIGHT);
+    mPlayer.handleTerrainCollision(mTerrain);
+
     // Update HUD at controlled interval
-    if (mHudUpdateTimer.shouldUpdate()) {
+    if (mHudUpdateTimer.shouldUpdate())
+    {
         mHeadsUpDisplay.update(mPlayer.getFlightStats());
     }
-    
+
     return true;
 }
 
 bool LunarLanderEngine::render()
-{   
+{
     // Calculate desired camera position (world coordinates)
     float cameraWorldX = mPlayer.getPosX() - (mScreenWidth / 2);
     float cameraWorldY = mPlayer.getPosY() - (mScreenHeight / 2);
-    
+
     // Clamp camera to world boundaries
     float clampedCameraX = std::clamp(cameraWorldX, 0.0f, static_cast<float>(WORLD_WIDTH - mScreenWidth));
     float clampedCameraY = std::clamp(cameraWorldY, 0.0f, static_cast<float>(WORLD_HEIGHT - mScreenHeight));
-    
+
     // Convert to terrain screen position
     int terrainScreenX = -static_cast<int>(clampedCameraX);
     int terrainScreenY = -static_cast<int>(clampedCameraY);
-    
+
     // Calculate player screen position relative to clamped camera
     int playerScreenX = static_cast<int>(mPlayer.getPosX() - clampedCameraX);
     int playerScreenY = static_cast<int>(mPlayer.getPosY() - clampedCameraY);
@@ -109,13 +109,11 @@ bool LunarLanderEngine::render()
     // render background
     SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 255);
     SDL_RenderClear(mRenderer.get());
-    
+
     // render world
-    mTextures.at("starfield").get()->render(
-        static_cast<int>(terrainScreenX * STARFIELD_PARALLAX_RATIO), 
-        static_cast<int>(terrainScreenY * STARFIELD_PARALLAX_RATIO));
+    mTextures.at("starfield").get()->render(static_cast<int>(terrainScreenX * STARFIELD_PARALLAX_RATIO), static_cast<int>(terrainScreenY * STARFIELD_PARALLAX_RATIO));
     mTextures.at("terrain").get()->render(terrainScreenX, terrainScreenY);
-    
+
     // render objects
     // render spacestation at center of world width and terrain start height
     float spacestationWorldX = WORLD_WIDTH / 2.0f;
@@ -143,9 +141,9 @@ void LunarLanderEngine::generateTerrain()
     };
     // todo printf
     std::cout << "Generating terrain" << std::endl;
-    mTerrainGenerator = TerrainGenerator(std::random_device{}());
+    mTerrainGenerator = TerrainGenerator(std::random_device {}());
     mTerrainGenerator.generateTerrain(mTerrain, config, static_cast<int>(WORLD_WIDTH / SCREEN_WIDTH));
-    
+
     // Create terrain texture
     createTargetTexture("terrain", static_cast<int>(mTerrain[0].size()), static_cast<int>(mTerrain.size()));
 
@@ -160,12 +158,12 @@ void LunarLanderEngine::generateBackground()
 
     std::cout << "Generating starfield background" << std::endl;
     mStarfieldGenerator.generateStarfield(starfieldWidth, starfieldHeight, 1500);
-    
-     // Create starfield texture
+
+    // Create starfield texture
     createTargetTexture("starfield", starfieldWidth, starfieldHeight);
-    
-     // Render stars to the texture
-     mStarfieldGenerator.createStarfieldTexture(mRenderer.get(), mTextures.at("starfield").get());
+
+    // Render stars to the texture
+    mStarfieldGenerator.createStarfieldTexture(mRenderer.get(), mTextures.at("starfield").get());
 }
 
 void LunarLanderEngine::spawnPlayer()

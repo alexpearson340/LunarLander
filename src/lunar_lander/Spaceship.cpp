@@ -131,11 +131,11 @@ SDL_Rect Spaceship::getCollisionBounds() const
     };
 }
 
-bool Spaceship::checkBoundaryCollision(int worldWidth, int worldHeight)
+bool Spaceship::handleBoundaryCollision(int worldWidth, int worldHeight)
 {
     SDL_Rect bounds = getDrawBounds();
     bool collision = false;
-    
+
     if (bounds.x < 0)
     {
         mPosition.setX(0);
@@ -160,11 +160,11 @@ bool Spaceship::checkBoundaryCollision(int worldWidth, int worldHeight)
         mVelocity.setY(0);
         collision = true;
     }
-    
+
     return collision;
 }
 
-bool Spaceship::checkTerrainCollision(std::vector<std::vector<int>>& terrain)
+bool Spaceship::handleTerrainCollision(std::vector<std::vector<int>>& terrain)
 {
     SDL_Rect bounds { getCollisionBounds() };
     int startX { std::max(0, bounds.x) };
@@ -176,7 +176,7 @@ bool Spaceship::checkTerrainCollision(std::vector<std::vector<int>>& terrain)
     {
         for (int x = startX; x != endX; x++)
         {
-            if (terrain[static_cast<size_t>(y)][static_cast<size_t>(x)] == 1)
+            if (terrain[static_cast<size_t>(y)][static_cast<size_t>(x)] == TERRAIN_ROCK)
             {
                 Vector2D oppositeVelocity { mVelocity * -1.0f };
                 mPosition += oppositeVelocity;
@@ -186,7 +186,7 @@ bool Spaceship::checkTerrainCollision(std::vector<std::vector<int>>& terrain)
             }
         }
     }
-    
+
     return false;
 }
 

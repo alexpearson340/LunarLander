@@ -29,8 +29,8 @@ public:
     void updatePhysics();
     SDL_Rect getDrawBounds() const;
     SDL_Rect getCollisionBounds() const;
-    bool checkBoundaryCollision(int, int);
-    bool checkTerrainCollision(std::vector<std::vector<int>>&);
+    bool handleBoundaryCollision(int, int);
+    bool handleTerrainCollision(std::vector<std::vector<int>>&);
     void render(const int, const int) const;
 
 private:
@@ -45,7 +45,7 @@ private:
     Vector2D mThrust;
     Vector2D mGravity;
 
-    Texture* mTexture; 
+    Texture* mTexture;
 };
 
 #endif // SPACESHIP_H

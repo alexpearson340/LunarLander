@@ -119,7 +119,7 @@ TEST_F(SpaceshipTest, TestTerrainCollision_TerrainInside)
     testSpaceship.thrustIncrease();
     testSpaceship.updatePhysics();
 
-    bool collision = testSpaceship.checkTerrainCollision(terrain);
+    bool collision = testSpaceship.handleTerrainCollision(terrain);
 
     // Verify collision was detected
     EXPECT_TRUE(collision);
@@ -141,7 +141,7 @@ TEST_F(SpaceshipTest, TestTerrainCollision_NoCollision)
     testSpaceship.thrustIncrease();
     testSpaceship.updatePhysics();
 
-    bool collision = testSpaceship.checkTerrainCollision(terrain);
+    bool collision = testSpaceship.handleTerrainCollision(terrain);
 
     // Verify no collision was detected
     EXPECT_FALSE(collision);
@@ -157,14 +157,14 @@ TEST_F(SpaceshipTest, TestTerrainCollision_RightWallNoCollision)
 {
     std::vector<std::vector<int>> terrain(50, std::vector<int>(50, 0));
     terrain[10][32] = 1;
-    EXPECT_FALSE(testSpaceship.checkTerrainCollision(terrain));
+    EXPECT_FALSE(testSpaceship.handleTerrainCollision(terrain));
 
     // move vertically down
     testSpaceship.rotate(180.0f);
     testSpaceship.thrustIncrease();
     testSpaceship.updatePhysics();
 
-    bool collision = testSpaceship.checkTerrainCollision(terrain);
+    bool collision = testSpaceship.handleTerrainCollision(terrain);
 
     // Verify no collision was detected
     EXPECT_FALSE(collision);
@@ -179,14 +179,14 @@ TEST_F(SpaceshipTest, TestTerrainCollision_RightWallCollision)
 {
     std::vector<std::vector<int>> terrain(50, std::vector<int>(50, 0));
     terrain[10][28] = 1;
-    EXPECT_FALSE(testSpaceship.checkTerrainCollision(terrain));
+    EXPECT_FALSE(testSpaceship.handleTerrainCollision(terrain));
 
     // move right - hit wall
     testSpaceship.rotate(90.0f);
     testSpaceship.thrustIncrease();
     testSpaceship.updatePhysics();
 
-    bool collision = testSpaceship.checkTerrainCollision(terrain);
+    bool collision = testSpaceship.handleTerrainCollision(terrain);
 
     // Verify collision was detected
     EXPECT_TRUE(collision);
@@ -201,13 +201,13 @@ TEST_F(SpaceshipTest, TestTerrainCollision_BottomWallNoCollision)
 {
     std::vector<std::vector<int>> terrain(50, std::vector<int>(50, 0));
     terrain[28][10] = 1;
-    EXPECT_FALSE(testSpaceship.checkTerrainCollision(terrain));
+    EXPECT_FALSE(testSpaceship.handleTerrainCollision(terrain));
 
     testSpaceship.rotate(90.0f);
     testSpaceship.thrustIncrease();
     testSpaceship.updatePhysics();
 
-    bool collision = testSpaceship.checkTerrainCollision(terrain);
+    bool collision = testSpaceship.handleTerrainCollision(terrain);
 
     // Verify no collision was detected
     EXPECT_FALSE(collision);
@@ -222,13 +222,13 @@ TEST_F(SpaceshipTest, TestTerrainCollision_BottomWallCollision)
 {
     std::vector<std::vector<int>> terrain(50, std::vector<int>(50, 0));
     terrain[28][10] = 1;
-    EXPECT_FALSE(testSpaceship.checkTerrainCollision(terrain));
+    EXPECT_FALSE(testSpaceship.handleTerrainCollision(terrain));
 
     testSpaceship.rotate(180.0f);
     testSpaceship.thrustIncrease();
     testSpaceship.updatePhysics();
 
-    bool collision = testSpaceship.checkTerrainCollision(terrain);
+    bool collision = testSpaceship.handleTerrainCollision(terrain);
 
     // Verify collision was detected
     EXPECT_TRUE(collision);
@@ -243,14 +243,14 @@ TEST_F(SpaceshipTest, TestTerrainCollision_DiagonalWallCollision)
 {
     std::vector<std::vector<int>> terrain(50, std::vector<int>(50, 0));
     terrain[28][28] = 1;
-    EXPECT_FALSE(testSpaceship.checkTerrainCollision(terrain));
+    EXPECT_FALSE(testSpaceship.handleTerrainCollision(terrain));
 
     // move right - hit wall
     testSpaceship.rotate(135.0f);
     testSpaceship.thrustIncrease();
     testSpaceship.updatePhysics();
 
-    bool collision = testSpaceship.checkTerrainCollision(terrain);
+    bool collision = testSpaceship.handleTerrainCollision(terrain);
 
     // Verify collision was detected
     EXPECT_TRUE(collision);
@@ -269,24 +269,24 @@ class SpaceshipBoundaryCollisionTest : public SpaceshipTest, public ::testing::W
 TEST_P(SpaceshipBoundaryCollisionTest, TestBoundaryCollisionAtOrientation)
 {
     float angle = GetParam();
-    
+
     // Start spaceship in center of slightly larger world (34x34 vs 32x32 spaceship)
     testSpaceship = Spaceship(1, 1, &mockTexture, 0.0f, 4.0f, 100.0f);
-    
+
     // Verify no initial collision in 34x34 world
-    EXPECT_FALSE(testSpaceship.checkBoundaryCollision(34, 34));
-    
+    EXPECT_FALSE(testSpaceship.handleBoundaryCollision(34, 34));
+
     // Rotate to the test angle and thrust
     testSpaceship.rotate(angle);
     testSpaceship.thrustIncrease();
     testSpaceship.updatePhysics();
-    
+
     // Check boundary collision with same world dimensions
-    bool collision = testSpaceship.checkBoundaryCollision(34, 34);
-    
+    bool collision = testSpaceship.handleBoundaryCollision(34, 34);
+
     // Verify collision was detected
     EXPECT_TRUE(collision);
-    
+
     EXPECT_NEAR(testSpaceship.getVelX(), 0.0f, 1e-6);
     EXPECT_NEAR(testSpaceship.getVelX(), 0.0f, 1e-6);
 }
@@ -299,19 +299,19 @@ INSTANTIATE_TEST_SUITE_P(
 TEST_F(SpaceshipTest, TestBoundaryCollision_VerticalWall_OnlyXVelocityZeroed)
 {
     testSpaceship = Spaceship(1, 40, &mockTexture, 0.0f, 4.0f, 100.0f);
-    EXPECT_FALSE(testSpaceship.checkBoundaryCollision(100, 100));
-    
+    EXPECT_FALSE(testSpaceship.handleBoundaryCollision(100, 100));
+
     // Create velocity in both X and Y directions
     testSpaceship.rotate(0.0f); // Face up
     testSpaceship.thrustIncrease();
     testSpaceship.updatePhysics();
-    EXPECT_FALSE(testSpaceship.checkBoundaryCollision(100, 100));
+    EXPECT_FALSE(testSpaceship.handleBoundaryCollision(100, 100));
 
     testSpaceship.rotate(-90.0f); // Face left
     testSpaceship.thrustIncrease();
     testSpaceship.updatePhysics();
 
-    bool collision = testSpaceship.checkBoundaryCollision(100, 100);
+    bool collision = testSpaceship.handleBoundaryCollision(100, 100);
 
     EXPECT_TRUE(collision);
     EXPECT_NEAR(testSpaceship.getVelX(), 0.0f, 1e-6); // X velocity zeroed (hit horizontal wall)
@@ -321,19 +321,19 @@ TEST_F(SpaceshipTest, TestBoundaryCollision_VerticalWall_OnlyXVelocityZeroed)
 TEST_F(SpaceshipTest, TestBoundaryCollision_HorizontalWall_OnlyYVelocityZeroed)
 {
     testSpaceship = Spaceship(40, 1, &mockTexture, 0.0f, 4.0f, 100.0f);
-    EXPECT_FALSE(testSpaceship.checkBoundaryCollision(100, 100));
-    
+    EXPECT_FALSE(testSpaceship.handleBoundaryCollision(100, 100));
+
     // Create velocity in both X and Y directions
     testSpaceship.rotate(90.0f); // Face right
     testSpaceship.thrustIncrease();
     testSpaceship.updatePhysics();
-    EXPECT_FALSE(testSpaceship.checkBoundaryCollision(100, 100));
+    EXPECT_FALSE(testSpaceship.handleBoundaryCollision(100, 100));
 
     testSpaceship.rotate(-90.0f); // Face up
     testSpaceship.thrustIncrease();
     testSpaceship.updatePhysics();
 
-    bool collision = testSpaceship.checkBoundaryCollision(100, 100);
+    bool collision = testSpaceship.handleBoundaryCollision(100, 100);
 
     EXPECT_TRUE(collision);
     EXPECT_GT(testSpaceship.getVelX(), 0.0f); // X velocity preserved
@@ -343,18 +343,18 @@ TEST_F(SpaceshipTest, TestBoundaryCollision_HorizontalWall_OnlyYVelocityZeroed)
 TEST_F(SpaceshipTest, TestBoundaryCollision_Corner_BothVelocitiesZeroed)
 {
     testSpaceship = Spaceship(1, 1, &mockTexture, 0.0f, 4.0f, 100.0f);
-    EXPECT_FALSE(testSpaceship.checkBoundaryCollision(40, 40));
-    
+    EXPECT_FALSE(testSpaceship.handleBoundaryCollision(40, 40));
+
     // Create velocity in both X and Y directions
     testSpaceship.rotate(135.0f);
     testSpaceship.thrustIncrease();
     testSpaceship.updatePhysics();
-    EXPECT_FALSE(testSpaceship.checkBoundaryCollision(40, 40));
+    EXPECT_FALSE(testSpaceship.handleBoundaryCollision(40, 40));
 
     testSpaceship.thrustIncrease();
     testSpaceship.updatePhysics();
 
-    bool collision = testSpaceship.checkBoundaryCollision(40, 40);
+    bool collision = testSpaceship.handleBoundaryCollision(40, 40);
 
     EXPECT_TRUE(collision);
     EXPECT_NEAR(testSpaceship.getVelX(), 0.0f, 1e-6); // X velocity zeroed

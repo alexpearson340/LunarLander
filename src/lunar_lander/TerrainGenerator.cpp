@@ -44,7 +44,7 @@ void TerrainGenerator::resizeTerrain(std::vector<std::vector<int>>& terrain, con
     terrain.resize(config.worldHeight);
     for (size_t y = 0; y < config.worldHeight; y++)
     {
-        terrain[y].resize(config.worldWidth, 0);
+        terrain[y].resize(config.worldWidth, TERRAIN_VACUUM);
     }
 };
 
@@ -64,7 +64,7 @@ void TerrainGenerator::fillTerrainUpToHeight(std::vector<std::vector<int>>& terr
 {
     for (size_t y = config.worldHeight - 1; y > config.worldHeight - static_cast<size_t>(height); y--)
     {
-        terrain[y][xPos] = 1;
+        terrain[y][xPos] = TERRAIN_ROCK;
     }
 };
 
