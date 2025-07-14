@@ -46,6 +46,8 @@ private:
     Vector2D mGravity;
 
     Texture* mTexture;
+    
+    void resetVelocity();
 };
 
 #endif // SPACESHIP_H

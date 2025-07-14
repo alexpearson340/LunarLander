@@ -28,7 +28,7 @@ public:
 private:
     void resizeTerrain(std::vector<std::vector<int>>&, const TerrainGenerationConfig &) const;
     int addLandingPad(std::vector<std::vector<int>>&, const TerrainGenerationConfig &, const int, const size_t);
-    void fillTerrainUpToHeight(std::vector<std::vector<int>>&, const TerrainGenerationConfig &, const int, const size_t);
+    void fillTerrainUpToHeight(std::vector<std::vector<int>>&, const TerrainGenerationConfig &, const int, const size_t, const int);
     bool shouldAddLandingPad();
 
     PerlinNoise1D mNoise;

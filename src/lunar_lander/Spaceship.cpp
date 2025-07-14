@@ -172,22 +172,34 @@ bool Spaceship::handleTerrainCollision(std::vector<std::vector<int>>& terrain)
     int endX { std::min(static_cast<int>(terrain.at(0).size()), (bounds.x + bounds.w)) };
     int endY { std::min(static_cast<int>(terrain.size()), (bounds.y + bounds.h)) };
 
+    bool hitLandingPad { false };
     for (int y = startY; y != endY; y++)
     {
         for (int x = startX; x != endX; x++)
-        {
-            if (terrain[static_cast<size_t>(y)][static_cast<size_t>(x)] == TERRAIN_ROCK)
+        {   
+            switch (terrain[static_cast<size_t>(y)][static_cast<size_t>(x)])
             {
-                Vector2D oppositeVelocity { mVelocity * -1.0f };
-                mPosition += oppositeVelocity;
-                mVelocity.setX(0);
-                mVelocity.setY(0);
-                return true;
+                // any rock collision and its gameover - short out here
+                case TERRAIN_ROCK:
+                {
+                    resetVelocity();
+                    return true;
+                }
+                case TERRAIN_LANDING_PAD:
+                {
+                    hitLandingPad = true;
+                    break;
+                }
+                default:
+                    break;
             }
         }
     }
-
-    return false;
+    if (hitLandingPad)
+    {
+        resetVelocity();
+    }
+    return hitLandingPad;
 }
 
 FlightStats Spaceship::getFlightStats() const
@@ -207,4 +219,12 @@ FlightStats Spaceship::getFlightStats() const
 void Spaceship::render(const int x, const int y) const
 {
     mTexture->render(x, y, NULL, static_cast<double>(mNoseAngle));
+}
+
+void Spaceship::resetVelocity()
+{
+    Vector2D oppositeVelocity { mVelocity * -1.0f };
+    mPosition += oppositeVelocity;
+    mVelocity.setX(0);
+    mVelocity.setY(0);
 }

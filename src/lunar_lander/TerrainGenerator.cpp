@@ -29,7 +29,7 @@ void TerrainGenerator::generateTerrain(std::vector<std::vector<int>>& terrain, c
         } else {
             double noiseValue = mNoise.octaveNoise(noiseX, config.octaves, config.persistence, config.scale);
             terrainHeight = config.startHeight + static_cast<int>(noiseValue * config.heightVariation);
-            fillTerrainUpToHeight(terrain, config, terrainHeight, terrainX);
+            fillTerrainUpToHeight(terrain, config, terrainHeight, terrainX, TERRAIN_ROCK);
             terrainX++;
             noiseX++;  // Only increment noise coordinate when we use a noise value - for continuous height on either side of a pad
         }
@@ -55,16 +55,16 @@ int TerrainGenerator::addLandingPad(std::vector<std::vector<int>>& terrain, cons
     
     for (size_t i = 0; i != padLength; i++)
     {
-        fillTerrainUpToHeight(terrain, config, height, xPos + i);
+        fillTerrainUpToHeight(terrain, config, height, xPos + i, TERRAIN_LANDING_PAD);
     };
     return static_cast<int>(padLength);
 };
 
-void TerrainGenerator::fillTerrainUpToHeight(std::vector<std::vector<int>>& terrain, const TerrainGenerationConfig & config, const int height, const size_t xPos)
+void TerrainGenerator::fillTerrainUpToHeight(std::vector<std::vector<int>>& terrain, const TerrainGenerationConfig & config, const int height, const size_t xPos, const int terrainValue)
 {
     for (size_t y = config.worldHeight - 1; y > config.worldHeight - static_cast<size_t>(height); y--)
     {
-        terrain[y][xPos] = TERRAIN_ROCK;
+        terrain[y][xPos] = terrainValue;
     }
 };
 
@@ -92,12 +92,19 @@ void TerrainGenerator::createTerrainTexture(SDL_Renderer* renderer, Texture* tar
         for (size_t y = 0; y < terrain.size(); y++)
         {
             SDL_Point point { static_cast<int>(x), static_cast<int>(y) };
-            if (terrain[y][x] == 1)
+            if (terrain[y][x] == TERRAIN_ROCK || terrain[y][x] == TERRAIN_LANDING_PAD)
             {
                 if (!reachedForeground)
                 {
                     terrainPoints.push_back(point);
                     reachedForeground = true;
+                    
+                    // Add extra thickness for landing pads (one pixel below, every other column)
+                    if (terrain[y][x] == TERRAIN_LANDING_PAD && y + 1 < terrain.size() && x % 2 == 0)
+                    {
+                        SDL_Point thickPoint { static_cast<int>(x), static_cast<int>(y + 1) };
+                        terrainPoints.push_back(thickPoint);
+                    }
                 }
                 else
                 {
