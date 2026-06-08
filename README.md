@@ -15,3 +15,5 @@ Lunar Lander clone in C++ and SDL2. <kbd>Space</kbd> to thrust, <kbd>←</kbd> <
 - **World/viewport camera system.** The world is 10× wider (configurable) than the screen and the camera follows the player, clamping at world edges, providing a sense of scale.
 
 - **Headless-testable game logic.** GoogleTest suite covers vector math and collision physics. Collision logic is decoupled from SDL via a mock `Texture`, so tests run without a renderer.
+
+*Fully parameterised — tweak [`Constants.h`](include/lunar_lander/Constants.h) for heavier gravity, rougher terrain, a busier galaxy, a wider world.*
