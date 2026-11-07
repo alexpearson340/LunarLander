@@ -18,3 +18,19 @@ void SoundEffect::play(int nLoops, int maxTimeMs)
 
     }
 }
+
+void SoundEffect::fadeOut(int fadeTimeMs)
+{
+    Mix_FadeOutChannel(1, fadeTimeMs);
+}
+
+void SoundEffect::stop()
+{
+    Mix_HaltChannel(1);
+}
+
+void SoundEffect::setVolume(int volume)
+{
+    // 128 is the maximum volume. This is the default channel volume
+    Mix_Volume(1, volume);
+}

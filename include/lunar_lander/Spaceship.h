@@ -20,6 +20,7 @@ public:
     float getVelX() const { return mVelocity.getX(); };
     float getVelY() const { return mVelocity.getY(); };
     float getNoseAngle() const { return mNoseAngle; };
+    float getThrustRatio() const { return mThrust.getMagnitude() / mMaxThrust;  };
 
     FlightStats getFlightStats() const;
     void rotate(const float);

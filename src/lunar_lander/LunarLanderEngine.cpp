@@ -5,7 +5,7 @@
 
 LunarLanderEngine::LunarLanderEngine()
     : BaseEngine(SCREEN_HEIGHT, SCREEN_WIDTH, DISPLAY_TITLE)
-    , mTerrainGenerator { std::random_device {}() } { };
+    , mTerrainGenerator { std::random_device { }() } { };
 
 bool LunarLanderEngine::loadMedia()
 {
@@ -30,13 +30,13 @@ bool LunarLanderEngine::create()
 
 bool LunarLanderEngine::update()
 {
-    switch (mCurrentState) 
+    switch (mCurrentState)
     {
-        case GameState::PLAYING:
-            return updatePlaying();
-        case GameState::DEATH:
-            return updateDeath();
-    } 
+    case GameState::PLAYING:
+        return updatePlaying();
+    case GameState::DEATH:
+        return updateDeath();
+    }
     return true;
 }
 
@@ -82,22 +82,34 @@ bool LunarLanderEngine::updatePlaying()
     if (keyState[SDL_SCANCODE_SPACE])
     {
         mPlayer.thrustIncrease();
-        mSoundEffect->play(0, 1000);
     }
     else
     {
         mPlayer.thrustDecay();
     }
 
+    // set thrust audio
+    float thrustRatio { mPlayer.getThrustRatio() };
+    if (thrustRatio > 0.001f)
+    {
+        mSoundEffect->play(-1);
+        mSoundEffect->setVolume(static_cast<int>(128.0f * thrustRatio));
+    }
+    else
+    {
+        mSoundEffect->fadeOut(500);
+    }
+
     // Handle physics
     mPlayer.updatePhysics();
     mPlayer.handleBoundaryCollision(WORLD_WIDTH, WORLD_HEIGHT);
-    
+
     // Check for death-causing collision
     if (mPlayer.handleTerrainCollision(mTerrain))
     {
         mPlayer.destroy();
         mCurrentState = GameState::DEATH;
+        mSoundEffect->stop();
     }
 
     // Update HUD at controlled interval
@@ -130,10 +142,10 @@ bool LunarLanderEngine::updateDeath()
             }
         }
     }
-    
+
     // TODO: Update explosion animation
     // TODO: Check if death animation is complete, then transition to next state
-    
+
     return true;
 }
 
@@ -190,7 +202,7 @@ void LunarLanderEngine::generateTerrain()
     };
     // todo printf
     std::cout << "Generating terrain" << std::endl;
-    mTerrainGenerator = TerrainGenerator(std::random_device {}());
+    mTerrainGenerator = TerrainGenerator(std::random_device { }());
     mTerrainGenerator.generateTerrain(mTerrain, config, static_cast<int>(WORLD_WIDTH / SCREEN_WIDTH));
 
     // Create terrain texture

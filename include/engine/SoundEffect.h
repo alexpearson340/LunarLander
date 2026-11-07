@@ -9,6 +9,9 @@ public:
     SoundEffect(Mix_Chunk*);
     ~SoundEffect();
     void play(int nLoops = 0, int maxTimeMs = -1);
+    void fadeOut(int fadeTimeMs);
+    void stop();
+    void setVolume(int volume);
 
 private:
     Mix_Chunk* mSoundEffect;
