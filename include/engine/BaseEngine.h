@@ -1,7 +1,7 @@
 #ifndef BASEENGINE_H
 #define BASEENGINE_H
 
-#include "engine/Audio.h"
+#include "engine/SoundEffect.h"
 #include "engine/Texture.h"
 #include "engine/Timer.h"
 #include <memory>
@@ -71,6 +71,7 @@ protected:
     bool createTargetTexture(const std::string_view, const int, const int);
     bool loadTexture(const std::string_view);
     bool loadFont(const std::string_view);
+    bool loadSoundEffect(const std::string_view);
     void setWindowTitle();
 
     // Frees media and shuts down SDL
@@ -80,9 +81,10 @@ protected:
     std::unique_ptr<SDL_Window, SDLWindowDeleter> mWindow;
     std::unique_ptr<SDL_Renderer, SDLRendererDeleter> mRenderer;
 
-    // textures and fonts
+    // textures, fonts and audio
     std::unordered_map<std::string_view, std::unique_ptr<Texture>> mTextures;
     std::unique_ptr<TTF_Font, SDLFontDeleter> mFont;
+    std::unique_ptr<SoundEffect> mSoundEffect;
 
     // Event handling
     SDL_Event mEvent;

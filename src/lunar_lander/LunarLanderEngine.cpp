@@ -14,6 +14,7 @@ bool LunarLanderEngine::loadMedia()
 
     success = success && loadTexture(SPACESHIP_TEXTURE);
     success = success && loadTexture(SPACESTATION_TEXTURE);
+    success = success && loadSoundEffect(THRUSTER_SOUND_EFFECT);
     return success;
 }
 
@@ -81,6 +82,7 @@ bool LunarLanderEngine::updatePlaying()
     if (keyState[SDL_SCANCODE_SPACE])
     {
         mPlayer.thrustIncrease();
+        mSoundEffect->play(0, 1000);
     }
     else
     {

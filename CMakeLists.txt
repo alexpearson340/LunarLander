@@ -54,6 +54,7 @@ include_directories(
 # the intention is that the engine lib encapsulates the rendering functionality (SDL2)
 add_library(engine_lib STATIC 
     src/engine/BaseEngine.cpp
+    src/engine/SoundEffect.cpp
     src/engine/Texture.cpp
     src/engine/Vector2D.cpp
 )

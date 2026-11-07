@@ -21,11 +21,11 @@ constexpr float MAX_THRUST { 4 * GRAVITY };
 constexpr float THRUST_UNIT { 0.1f * MAX_THRUST };
 
 // Terrain generation
-constexpr float TERRAIN_START_HEIGHT { 0.35f };       // fraction of WORLD_HEIGHT where terrain gen starts
-constexpr float TERRAIN_HEIGHT_VARIATION { 0.35f };   // fraction of WORLD_HEIGHT as terrain
-constexpr int PERLIN_OCTAVES { 4 };                  // Perlin Noise 1D parameter
-constexpr double PERLIN_PERSISTENCE { 0.5 };         // Perlin Noise 1D parameter 
-constexpr double PERLIN_FREQUENCY { 0.0025 };        // Perlin Noise 1D parameter
+constexpr float TERRAIN_START_HEIGHT { 0.35f }; // fraction of WORLD_HEIGHT where terrain gen starts
+constexpr float TERRAIN_HEIGHT_VARIATION { 0.35f }; // fraction of WORLD_HEIGHT as terrain
+constexpr int PERLIN_OCTAVES { 4 }; // Perlin Noise 1D parameter
+constexpr double PERLIN_PERSISTENCE { 0.5 }; // Perlin Noise 1D parameter
+constexpr double PERLIN_FREQUENCY { 0.0025 }; // Perlin Noise 1D parameter
 
 // Terrain values
 constexpr int TERRAIN_VACUUM { 0 };
@@ -36,8 +36,11 @@ constexpr int TERRAIN_LANDING_PAD { 2 };
 constexpr unsigned int MIN_LANDING_PAD_WIDTH { 50 };
 constexpr unsigned int MAX_LANDING_PAD_WIDTH { 100 };
 
-// Different textures
+// Textures
 constexpr std::string_view SPACESHIP_TEXTURE { "spaceship.bmp" };
 constexpr std::string_view SPACESTATION_TEXTURE { "spacestation.bmp" };
+
+// Audio
+constexpr std::string_view THRUSTER_SOUND_EFFECT { "thruster.wav" };
 
 #endif // CONSTANTS_H
