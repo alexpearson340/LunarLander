@@ -30,7 +30,7 @@ bool BaseEngine::init()
 
     // Initialize SDL
     printf("Initialising SDL\n");
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
     {
         printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
         success = false;
@@ -91,6 +91,14 @@ bool BaseEngine::init()
                         TTF_GetError());
                     success = false;
                 }
+
+                // Initialize SDL_mixer
+                printf("Initialising SDL Mixer\n");
+                if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+                {
+                    printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+                    success = false;
+                }
             }
         }
     }
@@ -101,11 +109,10 @@ bool BaseEngine::init()
 bool BaseEngine::createTargetTexture(const std::string_view name, const int width, const int height)
 {
     bool success = true;
-    printf("Creating %s x %s hardware texture with key %s\n", 
-        std::to_string(width).c_str(), 
-        std::to_string(height).c_str(), 
-        std::string(name).c_str()
-    );
+    printf("Creating %s x %s hardware texture with key %s\n",
+        std::to_string(width).c_str(),
+        std::to_string(height).c_str(),
+        std::string(name).c_str());
     SDL_Texture* renderTarget = SDL_CreateTexture(
         mRenderer.get(),
         SDL_PIXELFORMAT_RGBA8888,
@@ -113,7 +120,7 @@ bool BaseEngine::createTargetTexture(const std::string_view name, const int widt
         width,
         height);
     SDL_SetTextureBlendMode(renderTarget, SDL_BLENDMODE_BLEND);
-    
+
     // if it already exists we are freeing and overwriting it
     // we create these at runtime
     mTextures[name] = std::make_unique<Texture>(mRenderer.get());
@@ -172,6 +179,7 @@ void BaseEngine::close()
     mWindow.reset();
 
     // Quit SDL subsystems
+    Mix_Quit();
     TTF_Quit();
     IMG_Quit();
     SDL_Quit();

@@ -25,6 +25,10 @@ if(CMAKE_HOST_WIN32 )
     set(SDL2_TTF_INCLUDE_DIR "${CMAKE_SOURCE_DIR}\\..\\SDL2_ttf-2.24.0\\include")
     set(SDL2_TTF_LIBRARY "${CMAKE_SOURCE_DIR}\\..\\SDL2_ttf-2.24.0\\lib\\x64\\SDL2_ttf.lib")
     set(SDL2_TTF_LIBRARY_DLL "${CMAKE_SOURCE_DIR}\\..\\SDL2_ttf-2.24.0\\lib\\x64\\SDL2_ttf.dll")
+
+    set(SDL2_MIXER_INCLUDE_DIR "${CMAKE_SOURCE_DIR}\\..\\SDL2_mixer-2.8.2\\include")
+    set(SDL2_MIXER_LIBRARY "${CMAKE_SOURCE_DIR}\\..\\SDL2_mixer-2.8.2\\lib\\x64\\SDL2_mixer.lib")
+    set(SDL2_MIXER_LIBRARY_DLL "${CMAKE_SOURCE_DIR}\\..\\SDL2_mixer-2.8.2\\lib\\x64\\SDL2_mixer.dll")
 else()
     set(SDL2_INCLUDE_DIR "/opt/homebrew/include/SDL2")
     set(SDL2_LIBRARY "/opt/homebrew/lib/libSDL2.dylib")
@@ -34,12 +38,16 @@ else()
 
     set(SDL2_TTF_INCLUDE_DIR "/opt/homebrew/include/SDL2")
     set(SDL2_TTF_LIBRARY "/opt/homebrew/lib/libSDL2_ttf.dylib")
+
+    set(SDL2_MIXER_INCLUDE_DIR "/opt/homebrew/include/SDL2")
+    set(SDL2_MIXER_LIBRARY "/opt/homebrew/lib/libSDL2_mixer.dylib")
 endif(CMAKE_HOST_WIN32 )
 
 include_directories(
     ${SDL2_INCLUDE_DIR}
     ${SDL2_IMAGE_INCLUDE_DIR}
     ${SDL2_TTF_INCLUDE_DIR}
+    ${SDL2_MIXER_INCLUDE_DIR}
     ${CMAKE_SOURCE_DIR}/include
 )
 
@@ -55,6 +63,7 @@ target_link_libraries(engine_lib
         ${SDL2_LIBRARY}
         ${SDL2_IMAGE_LIBRARY}
         ${SDL2_TTF_LIBRARY}
+        ${SDL2_MIXER_LIBRARY}
 )
 
 # lunar lander game
@@ -109,6 +118,11 @@ if (WIN32)
     add_custom_command(
         TARGET lunar_lander_game POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${SDL2_TTF_LIBRARY_DLL}" "$<TARGET_FILE_DIR:lunar_lander_game>"
+        VERBATIM
+    )
+    add_custom_command(
+        TARGET lunar_lander_game POST_BUILD
+        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${SDL2_MIXER_LIBRARY_DLL}" "$<TARGET_FILE_DIR:lunar_lander_game>"
         VERBATIM
     )
 endif()
