@@ -138,8 +138,8 @@ bool LunarLanderEngine::updateDeath()
 bool LunarLanderEngine::render()
 {
     // Calculate desired camera position (world coordinates)
-    float cameraWorldX = mPlayer.getPosX() - (mScreenWidth / 2);
-    float cameraWorldY = mPlayer.getPosY() - (mScreenHeight / 2);
+    float cameraWorldX = mPlayer.getPosX() - (static_cast<float>(mScreenWidth) / 2);
+    float cameraWorldY = mPlayer.getPosY() - (static_cast<float>(mScreenHeight) / 2);
 
     // Clamp camera to world boundaries
     float clampedCameraX = std::clamp(cameraWorldX, 0.0f, static_cast<float>(WORLD_WIDTH - mScreenWidth));
@@ -158,7 +158,7 @@ bool LunarLanderEngine::render()
     SDL_RenderClear(mRenderer.get());
 
     // render world
-    mTextures.at("starfield").get()->render(static_cast<int>(terrainScreenX * STARFIELD_PARALLAX_RATIO), static_cast<int>(terrainScreenY * STARFIELD_PARALLAX_RATIO));
+    mTextures.at("starfield").get()->render(static_cast<int>(static_cast<float>(terrainScreenX) * STARFIELD_PARALLAX_RATIO), static_cast<int>(static_cast<float>(terrainScreenY) * STARFIELD_PARALLAX_RATIO));
     mTextures.at("terrain").get()->render(terrainScreenX, terrainScreenY);
 
     // render objects

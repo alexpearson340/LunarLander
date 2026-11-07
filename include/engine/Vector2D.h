@@ -4,7 +4,6 @@
 class Vector2D
 {
 public:
-
     Vector2D(const float x, const float y);
 
     float getX() const { return mX; }
@@ -13,10 +12,12 @@ public:
     float getAngleDegrees() const;
 
     void setX(const float x) { mX = x; };
+    void setX(const int x) { setX(static_cast<float>(x)); };
     void setY(const float y) { mY = y; };
+    void setY(const int y) { setY(static_cast<float>(y)); };
     void setMagnitude(float magnitude);
     void rotateTo(float degrees);
-    
+
     Vector2D& operator+=(const Vector2D&);
     Vector2D& operator-=(const Vector2D&);
     Vector2D& operator*=(const float);

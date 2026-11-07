@@ -2,40 +2,40 @@
 #include <iostream>
 
 StarfieldGenerator::StarfieldGenerator()
-    : mLargeScaleNoise(std::random_device{}())
-    , mMediumScaleNoise(std::random_device{}())
-    , mSmallScaleNoise(std::random_device{}())
-    , mVariationNoise(std::random_device{}())
-    , mGenerator(std::random_device{}())
+    : mLargeScaleNoise(std::random_device { }())
+    , mMediumScaleNoise(std::random_device { }())
+    , mSmallScaleNoise(std::random_device { }())
+    , mVariationNoise(std::random_device { }())
+    , mGenerator(std::random_device { }())
 {
 }
 
 void StarfieldGenerator::generateStarfield(int width, int height, size_t targetStars)
 {
     // Reinitialize noise generators with new seed each time
-    unsigned int seed = std::random_device{}();
+    unsigned int seed = std::random_device { }();
     mLargeScaleNoise = PerlinNoise1D(seed);
     mMediumScaleNoise = PerlinNoise1D(seed + 1);
     mSmallScaleNoise = PerlinNoise1D(seed + 2);
     mVariationNoise = PerlinNoise1D(seed + 3);
     mGenerator.seed(seed);
-    
+
     // Set dimensions and derived values
     mWidth = width;
     mHeight = height;
     mGalacticCenterX = static_cast<int>(width * 0.3); // Off-center for realism
     mGalacticCenterY = static_cast<int>(height * 0.35); // Lower third of screen
     mGalacticPlaneY = static_cast<int>(height * 0.45); // Slightly below center
-    
+
     mStars.clear();
     mStars.reserve(4000); // Pre-allocate for performance
 
     // Distribute stars across different astronomical components
     // These percentages roughly match real galaxy structure
-    size_t galacticPlaneStars = static_cast<size_t>(targetStars * 0.25);
-    size_t galacticCenterStars = static_cast<size_t>(targetStars * 0.15);
-    size_t spiralArmStars = static_cast<size_t>(targetStars * 0.25);
-    size_t clusterStars = static_cast<size_t>(targetStars * 0.20);
+    size_t galacticPlaneStars = static_cast<size_t>(static_cast<double>(targetStars) * 0.25);
+    size_t galacticCenterStars = static_cast<size_t>(static_cast<double>(targetStars) * 0.15);
+    size_t spiralArmStars = static_cast<size_t>(static_cast<double>(targetStars) * 0.25);
+    size_t clusterStars = static_cast<size_t>(static_cast<double>(targetStars) * 0.20);
     size_t backgroundStars = targetStars - (galacticPlaneStars + galacticCenterStars + spiralArmStars + clusterStars);
 
     std::cout << "Generating realistic starfield with " << targetStars << " stars:" << std::endl;
@@ -218,7 +218,7 @@ void StarfieldGenerator::generateLocalClusters(size_t starCount)
         if (clusterDensity < 0.3)
             continue;
 
-        size_t actualStarsThisCluster = static_cast<size_t>(starsPerCluster * clusterDensity);
+        size_t actualStarsThisCluster = static_cast<size_t>(static_cast<double>(starsPerCluster) * clusterDensity);
 
         for (size_t i = 0; i < actualStarsThisCluster; ++i)
         {
@@ -288,18 +288,20 @@ void StarfieldGenerator::createStarfieldTexture(SDL_Renderer* renderer, Texture*
 {
     // Set the passed texture as render target
     targetTexture->setAsRenderingTarget();
-    
+
     // Clear with transparent background
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0); // Transparent background
     SDL_RenderClear(renderer);
 
     // Render stars with brightness variation
-    for (const auto& star : mStars) {
+    for (const auto& star : mStars)
+    {
         SDL_SetRenderDrawColor(renderer, star.brightness, star.brightness, star.brightness, 255);
         SDL_RenderDrawPoint(renderer, star.x, star.y);
 
         // Optional: Add slight bloom for brighter stars
-        if (star.brightness > 200) {
+        if (star.brightness > 200)
+        {
             SDL_SetRenderDrawColor(renderer, star.brightness / 3, star.brightness / 3, star.brightness / 3, 255);
             SDL_RenderDrawPoint(renderer, star.x + 1, star.y);
             SDL_RenderDrawPoint(renderer, star.x - 1, star.y);
