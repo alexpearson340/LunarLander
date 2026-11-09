@@ -106,13 +106,13 @@ bool BaseEngine::init()
     return success;
 }
 
-bool BaseEngine::createTargetTexture(const std::string_view name, const int width, const int height)
+bool BaseEngine::createTargetTexture(const size_t key, const int width, const int height)
 {
     bool success = true;
     printf("Creating %s x %s hardware texture with key %s\n",
         std::to_string(width).c_str(),
         std::to_string(height).c_str(),
-        std::string(name).c_str());
+        std::to_string(static_cast<int>(key)).data());
     SDL_Texture* renderTarget = SDL_CreateTexture(
         mRenderer.get(),
         SDL_PIXELFORMAT_RGBA8888,
@@ -123,31 +123,22 @@ bool BaseEngine::createTargetTexture(const std::string_view name, const int widt
 
     // if it already exists we are freeing and overwriting it
     // we create these at runtime
-    mTextures[name] = std::make_unique<Texture>(mRenderer.get());
-    mTextures.at(name).get()->setTexture(renderTarget, width, height);
+    mTextures[key] = std::make_unique<Texture>(mRenderer.get());
+    mTextures[key]->setTexture(renderTarget, width, height);
     return success;
 }
 
-bool BaseEngine::loadTexture(const std::string_view fileName)
+bool BaseEngine::loadTexture(const size_t key, const std::string_view fileName)
 {
-    bool success = true;
     std::string filePath { std::string(ASSETS_DIR) + "/" + std::string(fileName) };
     printf("Loading %s\n", std::string(fileName).c_str());
-    if (mTextures.find(fileName) != mTextures.end())
+    mTextures[key] = std::make_unique<Texture>(mRenderer.get());
+    if (!mTextures[key]->loadFromFile(filePath))
     {
-        printf("Key %s has already been loaded to the textures map!\n", filePath.c_str());
-        success = false;
+        printf("Failed to load %s image!\n", filePath.c_str());
+        return false;
     }
-    else
-    {
-        mTextures.emplace(fileName, std::make_unique<Texture>(mRenderer.get()));
-        if (!mTextures.at(fileName)->loadFromFile(filePath))
-        {
-            printf("Failed to load %s image!\n", filePath.c_str());
-            success = false;
-        }
-    }
-    return success;
+    return true;
 }
 
 bool BaseEngine::loadFont(const std::string_view fileName)

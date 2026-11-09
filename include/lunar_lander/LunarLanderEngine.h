@@ -15,6 +15,15 @@ enum class GameState
     DEATH
 };
 
+enum class Textures : size_t
+{   
+    SPACESHIP = 0,
+    SPACESTATION = 1,
+    TERRAIN = 2,
+    STARFIELD = 3,
+    TOTAL_TEXTURES = 4
+};
+
 enum class SoundEffects : size_t
 {
     THRUSTER = 0,

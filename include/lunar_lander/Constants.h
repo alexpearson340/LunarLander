@@ -37,8 +37,8 @@ constexpr unsigned int MIN_LANDING_PAD_WIDTH { 50 };
 constexpr unsigned int MAX_LANDING_PAD_WIDTH { 100 };
 
 // Textures
-constexpr std::string_view SPACESHIP_TEXTURE { "spaceship.bmp" };
-constexpr std::string_view SPACESTATION_TEXTURE { "spacestation.bmp" };
+constexpr std::string_view SPACESHIP_TEXTURE_FILE { "spaceship.bmp" };
+constexpr std::string_view SPACESTATION_TEXTURE_FILE { "spacestation.bmp" };
 
 // Audio
 constexpr std::string_view THRUSTER_SOUND_EFFECT_FILE { "thruster.wav" };

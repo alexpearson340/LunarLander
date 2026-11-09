@@ -68,8 +68,8 @@ protected:
     virtual bool render() = 0;
 
     // Loads the textures at the file path
-    bool createTargetTexture(const std::string_view, const int, const int);
-    bool loadTexture(const std::string_view);
+    bool createTargetTexture(const size_t, const int, const int);
+    bool loadTexture(const size_t, const std::string_view);
     bool loadFont(const std::string_view);
     bool loadSoundEffect(const size_t, const std::string_view);
     void setWindowTitle();
@@ -82,7 +82,7 @@ protected:
     std::unique_ptr<SDL_Renderer, SDLRendererDeleter> mRenderer;
 
     // textures, fonts and audio
-    std::unordered_map<std::string_view, std::unique_ptr<Texture>> mTextures;
+    std::vector<std::unique_ptr<Texture>> mTextures;
     std::unique_ptr<TTF_Font, SDLFontDeleter> mFont;
     std::vector<std::unique_ptr<SoundEffect>> mSoundEffects;
 

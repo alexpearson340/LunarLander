@@ -9,16 +9,20 @@ LunarLanderEngine::LunarLanderEngine()
 
 bool LunarLanderEngine::loadMedia()
 {
-    bool success = true;
     mTextures.clear();
+    mTextures.resize(static_cast<size_t>(Textures::TOTAL_TEXTURES));
     mSoundEffects.clear();
     mSoundEffects.resize(static_cast<size_t>(SoundEffects::TOTAL_SOUND_EFFECTS));
 
-    success = success && loadTexture(SPACESHIP_TEXTURE);
-    success = success && loadTexture(SPACESTATION_TEXTURE);
-    success = success && loadSoundEffect(static_cast<size_t>(SoundEffects::THRUSTER), THRUSTER_SOUND_EFFECT_FILE);
-    success = success && loadSoundEffect(static_cast<size_t>(SoundEffects::EXPLOSION), EXPLOSION_SOUND_EFFECT_FILE);
-    return success;
+    if (!loadTexture(static_cast<size_t>(Textures::SPACESHIP), SPACESHIP_TEXTURE_FILE))
+        return false;
+    if (!loadTexture(static_cast<size_t>(Textures::SPACESTATION), SPACESTATION_TEXTURE_FILE))
+        return false;
+    if (!loadSoundEffect(static_cast<size_t>(SoundEffects::THRUSTER), THRUSTER_SOUND_EFFECT_FILE))
+        return false;
+    if (!loadSoundEffect(static_cast<size_t>(SoundEffects::EXPLOSION), EXPLOSION_SOUND_EFFECT_FILE))
+        return false;
+    return true;
 }
 
 bool LunarLanderEngine::create()
@@ -176,8 +180,8 @@ bool LunarLanderEngine::render()
     SDL_RenderClear(mRenderer.get());
 
     // render world
-    mTextures.at("starfield").get()->render(static_cast<int>(static_cast<float>(terrainScreenX) * STARFIELD_PARALLAX_RATIO), static_cast<int>(static_cast<float>(terrainScreenY) * STARFIELD_PARALLAX_RATIO));
-    mTextures.at("terrain").get()->render(terrainScreenX, terrainScreenY);
+    mTextures[static_cast<size_t>(Textures::STARFIELD)]->render(static_cast<int>(static_cast<float>(terrainScreenX) * STARFIELD_PARALLAX_RATIO), static_cast<int>(static_cast<float>(terrainScreenY) * STARFIELD_PARALLAX_RATIO));
+    mTextures[static_cast<size_t>(Textures::TERRAIN)]->render(terrainScreenX, terrainScreenY);
 
     // render objects
     // render spacestation at center of world width and terrain start height
@@ -185,7 +189,7 @@ bool LunarLanderEngine::render()
     float spacestationWorldY = WORLD_HEIGHT * (1.0f - TERRAIN_START_HEIGHT);
     int spacestationScreenX = static_cast<int>(spacestationWorldX - clampedCameraX);
     int spacestationScreenY = static_cast<int>(spacestationWorldY - clampedCameraY);
-    mTextures.at(SPACESTATION_TEXTURE).get()->render(spacestationScreenX, spacestationScreenY);
+    mTextures[static_cast<size_t>(Textures::SPACESTATION)]->render(spacestationScreenX, spacestationScreenY);
     mPlayer.render(playerScreenX, playerScreenY);
     mHeadsUpDisplay.render();
 
@@ -210,10 +214,10 @@ void LunarLanderEngine::generateTerrain()
     mTerrainGenerator.generateTerrain(mTerrain, config, static_cast<int>(WORLD_WIDTH / SCREEN_WIDTH));
 
     // Create terrain texture
-    createTargetTexture("terrain", static_cast<int>(mTerrain[0].size()), static_cast<int>(mTerrain.size()));
+    createTargetTexture(static_cast<size_t>(Textures::TERRAIN), static_cast<int>(mTerrain[0].size()), static_cast<int>(mTerrain.size()));
 
     // Render terrain to the texture
-    mTerrainGenerator.createTerrainTexture(mRenderer.get(), mTextures.at("terrain").get(), mTerrain);
+    mTerrainGenerator.createTerrainTexture(mRenderer.get(), mTextures[static_cast<size_t>(Textures::TERRAIN)].get(), mTerrain);
 }
 
 void LunarLanderEngine::generateBackground()
@@ -225,10 +229,10 @@ void LunarLanderEngine::generateBackground()
     mStarfieldGenerator.generateStarfield(starfieldWidth, starfieldHeight, 1500);
 
     // Create starfield texture
-    createTargetTexture("starfield", starfieldWidth, starfieldHeight);
+    createTargetTexture(static_cast<size_t>(Textures::STARFIELD), starfieldWidth, starfieldHeight);
 
     // Render stars to the texture
-    mStarfieldGenerator.createStarfieldTexture(mRenderer.get(), mTextures.at("starfield").get());
+    mStarfieldGenerator.createStarfieldTexture(mRenderer.get(), mTextures[static_cast<size_t>(Textures::STARFIELD)].get());
 }
 
 void LunarLanderEngine::spawnPlayer()
@@ -236,7 +240,7 @@ void LunarLanderEngine::spawnPlayer()
     std::cout << "Spawning player" << std::endl;
     int worldCenterX = WORLD_WIDTH / 2;
     int worldCenterY = WORLD_HEIGHT / 2;
-    mPlayer = Spaceship(worldCenterX, worldCenterY, mTextures.at(SPACESHIP_TEXTURE).get(), GRAVITY, THRUST_UNIT, MAX_THRUST);
+    mPlayer = Spaceship(worldCenterX, worldCenterY, mTextures[static_cast<size_t>(Textures::SPACESHIP)].get(), GRAVITY, THRUST_UNIT, MAX_THRUST);
 }
 
 void LunarLanderEngine::createHeadsUpDisplay()
