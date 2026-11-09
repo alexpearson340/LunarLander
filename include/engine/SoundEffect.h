@@ -3,6 +3,8 @@
 
 #include <SDL_mixer.h>
 
+constexpr int SOUND_EFFECTS_CHANNEL {1};
+
 class SoundEffect
 {
 public:

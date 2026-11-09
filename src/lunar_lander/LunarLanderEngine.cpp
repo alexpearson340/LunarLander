@@ -11,10 +11,13 @@ bool LunarLanderEngine::loadMedia()
 {
     bool success = true;
     mTextures.clear();
+    mSoundEffects.clear();
+    mSoundEffects.resize(static_cast<size_t>(SoundEffects::TOTAL_SOUND_EFFECTS));
 
     success = success && loadTexture(SPACESHIP_TEXTURE);
     success = success && loadTexture(SPACESTATION_TEXTURE);
-    success = success && loadSoundEffect(THRUSTER_SOUND_EFFECT);
+    success = success && loadSoundEffect(static_cast<size_t>(SoundEffects::THRUSTER), THRUSTER_SOUND_EFFECT_FILE);
+    success = success && loadSoundEffect(static_cast<size_t>(SoundEffects::EXPLOSION), EXPLOSION_SOUND_EFFECT_FILE);
     return success;
 }
 
@@ -92,12 +95,12 @@ bool LunarLanderEngine::updatePlaying()
     float thrustRatio { mPlayer.getThrustRatio() };
     if (thrustRatio > 0.001f)
     {
-        mSoundEffect->play(-1);
-        mSoundEffect->setVolume(static_cast<int>(128.0f * thrustRatio));
+        mSoundEffects[static_cast<size_t>(SoundEffects::THRUSTER)]->play();
+        mSoundEffects[static_cast<size_t>(SoundEffects::THRUSTER)]->setVolume(static_cast<int>(128.0f * thrustRatio));
     }
     else
     {
-        mSoundEffect->fadeOut(500);
+        mSoundEffects[static_cast<size_t>(SoundEffects::THRUSTER)]->fadeOut(500);
     }
 
     // Handle physics
@@ -109,7 +112,8 @@ bool LunarLanderEngine::updatePlaying()
     {
         mPlayer.destroy();
         mCurrentState = GameState::DEATH;
-        mSoundEffect->stop();
+        mSoundEffects[static_cast<size_t>(SoundEffects::THRUSTER)]->stop();
+        mSoundEffects[static_cast<size_t>(SoundEffects::EXPLOSION)]->play();
     }
 
     // Update HUD at controlled interval

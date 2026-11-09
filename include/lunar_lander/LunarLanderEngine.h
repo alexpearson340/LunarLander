@@ -4,14 +4,22 @@
 #include "engine/BaseEngine.h"
 #include "engine/Timer.h"
 #include "lunar_lander/Constants.h"
+#include "lunar_lander/HeadsUpDisplay.h"
 #include "lunar_lander/Spaceship.h"
 #include "lunar_lander/StarfieldGenerator.h"
 #include "lunar_lander/TerrainGenerator.h"
-#include "lunar_lander/HeadsUpDisplay.h"
 
-enum class GameState {
+enum class GameState
+{
     PLAYING,
     DEATH
+};
+
+enum class SoundEffects : size_t
+{
+    THRUSTER = 0,
+    EXPLOSION = 1,
+    TOTAL_SOUND_EFFECTS = 2
 };
 
 class LunarLanderEngine : public BaseEngine
@@ -24,22 +32,22 @@ private:
     bool create() override;
     bool update() override;
     bool render() override;
-    
+
     void generateTerrain();
     void generateBackground();
     void spawnPlayer();
     void createHeadsUpDisplay();
-    
+
     bool updatePlaying();
     bool updateDeath();
 
-    std::vector<std::vector<int>> mTerrain;     // for collision physics
+    std::vector<std::vector<int>> mTerrain; // for collision physics
     Spaceship mPlayer;
     TerrainGenerator mTerrainGenerator;
     StarfieldGenerator mStarfieldGenerator;
     HeadsUpDisplay mHeadsUpDisplay;
-    Timer mHudUpdateTimer{500};  // Update HUD every 500ms
-    
+    Timer mHudUpdateTimer { 500 }; // Update HUD every 500ms
+
     GameState mCurrentState = GameState::PLAYING;
 };
 

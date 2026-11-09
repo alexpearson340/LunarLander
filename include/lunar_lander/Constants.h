@@ -41,6 +41,7 @@ constexpr std::string_view SPACESHIP_TEXTURE { "spaceship.bmp" };
 constexpr std::string_view SPACESTATION_TEXTURE { "spacestation.bmp" };
 
 // Audio
-constexpr std::string_view THRUSTER_SOUND_EFFECT { "thruster.wav" };
+constexpr std::string_view THRUSTER_SOUND_EFFECT_FILE { "thruster.wav" };
+constexpr std::string_view EXPLOSION_SOUND_EFFECT_FILE { "explosion.wav" };
 
 #endif // CONSTANTS_H

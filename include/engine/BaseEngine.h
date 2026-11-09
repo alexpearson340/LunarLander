@@ -71,7 +71,7 @@ protected:
     bool createTargetTexture(const std::string_view, const int, const int);
     bool loadTexture(const std::string_view);
     bool loadFont(const std::string_view);
-    bool loadSoundEffect(const std::string_view);
+    bool loadSoundEffect(const size_t, const std::string_view);
     void setWindowTitle();
 
     // Frees media and shuts down SDL
@@ -84,7 +84,7 @@ protected:
     // textures, fonts and audio
     std::unordered_map<std::string_view, std::unique_ptr<Texture>> mTextures;
     std::unique_ptr<TTF_Font, SDLFontDeleter> mFont;
-    std::unique_ptr<SoundEffect> mSoundEffect;
+    std::vector<std::unique_ptr<SoundEffect>> mSoundEffects;
 
     // Event handling
     SDL_Event mEvent;

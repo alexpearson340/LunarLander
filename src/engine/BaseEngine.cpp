@@ -164,18 +164,17 @@ bool BaseEngine::loadFont(const std::string_view fileName)
     return success;
 }
 
-bool BaseEngine::loadSoundEffect(const std::string_view fileName)
+bool BaseEngine::loadSoundEffect(const size_t key, const std::string_view fileName)
 {
-    bool success { true };
     std::string soundEffectPath { std::string(ASSETS_DIR) + "/" + std::string(fileName) };
     printf("Loading %s\n", std::string(fileName).c_str());
-    mSoundEffect = std::make_unique<SoundEffect>(Mix_LoadWAV(soundEffectPath.c_str()));
-    if (mSoundEffect == NULL)
+    mSoundEffects[key] = std::make_unique<SoundEffect>(Mix_LoadWAV(soundEffectPath.c_str()));
+    if (mSoundEffects[key] == NULL)
     {
         printf("Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError());
-        success = false;
+        return false;
     }
-    return success;
+    return true;
 }
 
 void BaseEngine::setWindowTitle()
